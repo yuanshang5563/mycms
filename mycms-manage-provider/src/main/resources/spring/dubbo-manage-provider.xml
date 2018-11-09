@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-4.3.xsd 
+	http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
+
+    <dubbo:application name="mycms-manage-provider"  />  
+    <dubbo:protocol name="dubbo" port="20880" />  
+    <!-- 声明需要暴露的服务接口 -->
+    <dubbo:service interface="org.ys.core.service.CoreUserService" ref="coreUserService" />  
+    <dubbo:service interface="org.ys.core.service.CoreMenuService" ref="coreMenuService" />  
+    <dubbo:service interface="org.ys.core.service.CoreRoleMenuService" ref="coreRoleMenuService" />  
+    <dubbo:service interface="org.ys.core.service.CoreRoleService" ref="coreRoleService" />  
+    <dubbo:service interface="org.ys.core.service.CoreUserRoleService" ref="coreUserRoleService" />
+    <dubbo:service interface="org.ys.core.service.CoreDeptService" ref="coreDeptService" />        
+</beans>  
