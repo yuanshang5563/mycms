@@ -20,4 +20,6 @@ public interface CoreUserService {
 	public List<CoreUser>queryCoreUsersByExample(CoreUserExample example) throws Exception;
 	
 	public PageBean<CoreUser> pageCoreUsersByExample(CoreUserExample example,int pageNum,int pageSize) throws Exception;
+	
+	public void saveOrUpdateCoreUserAndRoles(CoreUser coreUser,String[] roles) throws Exception;
 }

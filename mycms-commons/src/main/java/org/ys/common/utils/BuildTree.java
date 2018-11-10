@@ -19,7 +19,7 @@ public class BuildTree {
 		for (Tree<T> children : nodes) {
 
 			String pid = children.getParentId();
-			if (pid == null || "0".equals(pid)) {
+			if (pid == null) {
 				topNodes.add(children);
 
 				continue;

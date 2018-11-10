@@ -2,6 +2,7 @@ package org.ys.core.service;
 
 import java.util.List;
 
+import org.ys.common.page.PageBean;
 import org.ys.core.model.CoreRole;
 import org.ys.core.model.CoreRoleExample;
 
@@ -17,4 +18,6 @@ public interface CoreRoleService {
 	public void delCoreRoleById(Long coreRoleId) throws Exception;
 	
 	public List<CoreRole>queryCoreRolesByExample(CoreRoleExample example) throws Exception;	
+	
+	public PageBean<CoreRole> pageCoreRolesByExample(CoreRoleExample example,int pageNum,int pageSize) throws Exception;
 }

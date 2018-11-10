@@ -28,13 +28,13 @@
 								<label class="col-sm-3 control-label">菜单类型：</label>
 								<div class="col-sm-8">
 									<label class="radio-inline"> 
-										<input type="radio" name="menuType" value="0" /> 目录
+										<input type="radio" name="menuType" value="0"> 目录</input>
 									</label> 
 									<label class="radio-inline"> 
-										<input type="radio" name="menuType" value="1" /> 菜单
+										<input type="radio" name="menuType" value="1"> 菜单</input>
 									</label> 
 									<label class="radio-inline"> 
-										<input type="radio" name="menuType" value="2" /> 按钮
+										<input type="radio" name="menuType" value="2"> 按钮</input>
 									</label>
 									<script>$("input[name='menuType'][value='${coreMenu.menuType}']").attr("checked",true); </script>
 								</div>

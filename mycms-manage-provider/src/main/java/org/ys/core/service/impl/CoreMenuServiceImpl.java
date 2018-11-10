@@ -81,31 +81,31 @@ public class CoreMenuServiceImpl implements CoreMenuService{
 		return coreMenuMapper.selectByExample(example);
 	}
 	
-	private Set<CoreMenu> queryAllSubMensByParentId(Long parentId,Set<CoreMenu> allSubMenus) throws Exception  {
-		if(null == parentId) {
-			return null;
-		}
-		List<CoreMenu> menus = queryCoreMenusByParentId(parentId);
-		if(null != menus && menus.size() > 0){
-			if(null != allSubMenus){
-				allSubMenus.addAll(menus);
-			}
-			for (CoreMenu menu : menus) {
-				if("menu-node".equals(menu.getMenuType())){
-					queryAllSubMensByParentId(menu.getCoreMenuId(),allSubMenus);
-				}
-			}
-		}
-		return allSubMenus;
+	private Set<CoreMenu> queryAllSubCoreMenusByMenuId(Long coreMenuId,Set<CoreMenu> allSubMenus,List<CoreMenu> allMenus) throws Exception  {
+        for(CoreMenu menu : allMenus){
+        	if(menu.getCoreMenuId() == coreMenuId) {
+        		allSubMenus.add(menu);
+        	}
+            //遍历出父id等于参数的id，add进子节点集合
+            if(menu.getParentCoreMenuId() == coreMenuId){
+                //递归遍历下一级
+            	queryAllSubCoreMenusByMenuId(menu.getCoreMenuId(),allSubMenus,allMenus);
+            	allSubMenus.add(menu);
+            }
+        }
+        return allSubMenus;	
 	}
 
 	@Override
-	public Set<CoreMenu> queryAllSubCoreMensByParentId(Long parentId) throws Exception {
-		if(null == parentId) {
+	public Set<CoreMenu> queryAllSubCoreMenusByMenuId(Long coreMenuId) throws Exception {
+		if(null == coreMenuId) {
 			return null;
 		}
 		Set<CoreMenu> allSubMenus = new HashSet<>();
-		return queryAllSubMensByParentId(parentId,allSubMenus);
+		//一次找出所有节点然后处理
+		CoreMenuExample example = new CoreMenuExample();
+		List<CoreMenu> allMenus = coreMenuMapper.selectByExample(example);
+		return queryAllSubCoreMenusByMenuId(coreMenuId,allSubMenus,allMenus);
 	}
 
 	@Override

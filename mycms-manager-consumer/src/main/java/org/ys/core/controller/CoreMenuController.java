@@ -31,7 +31,7 @@ public class CoreMenuController {
 	private CoreMenuService coreMenuService;
 	
 	@RequestMapping("/coreMenuList")
-	public ModelAndView getMenuList() throws Exception {
+	public ModelAndView coreMenuList() throws Exception {
 		ModelAndView model = new ModelAndView("/manager/core_menu/core_menu_list");
 		return model;
 	}
@@ -61,9 +61,9 @@ public class CoreMenuController {
 		return model;
 	}
 	
-	@RequestMapping("/coreMenuFormSave")
+	@RequestMapping("/saveCoreMenuForm")
 	@ResponseBody
-	public Map<String,Object> coreMenuFormSave(HttpServletRequest request)throws Exception {
+	public Map<String,Object> saveCoreMenuForm(HttpServletRequest request)throws Exception {
 		String msg = "";
 		boolean success = false;
 		try {
@@ -142,7 +142,7 @@ public class CoreMenuController {
 	
 	@RequestMapping("/coreMenuListJsonData")
 	@ResponseBody
-	public Map<String,Object> getCoreMenuListJsonData(HttpServletRequest request)throws Exception {
+	public Map<String,Object> coreMenuListJsonData(HttpServletRequest request)throws Exception {
 		String start = request.getParameter("start");
 		String limit = request.getParameter("limit");
 		String menuName = request.getParameter("menuName");

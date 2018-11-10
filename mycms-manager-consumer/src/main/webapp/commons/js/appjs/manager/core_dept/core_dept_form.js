@@ -10,7 +10,7 @@ function coreDeptFormSave() {
 		$.ajax({
 			cache : true,
 			type : "POST",
-			url : prefix + "/coreDeptFormSave",
+			url : prefix + "/saveCoreDeptForm",
 			data : $('#coreDeptForm').serialize(),
 			async : false,
 			error : function(request) {

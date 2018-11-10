@@ -3,6 +3,8 @@ package org.ys.core.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class CoreUser implements Serializable {
     /**
 	 * 
@@ -254,6 +256,7 @@ public class CoreUser implements Serializable {
      *
      * @mbg.generated
      */
+    @JsonFormat(pattern="yyyy-MM-dd ")
     public Date getBirthday() {
         return birthday;
     }
@@ -398,6 +401,7 @@ public class CoreUser implements Serializable {
      *
      * @mbg.generated
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date getCreatedTime() {
         return createdTime;
     }
@@ -422,6 +426,7 @@ public class CoreUser implements Serializable {
      *
      * @mbg.generated
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     public Date getModifiedTime() {
         return modifiedTime;
     }

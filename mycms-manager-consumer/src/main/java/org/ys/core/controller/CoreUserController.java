@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,9 +20,14 @@ import org.springframework.web.servlet.ModelAndView;
 import org.ys.common.page.PageBean;
 import org.ys.common.utils.DateTimeConverter;
 import org.ys.common.utils.RequsetUtils;
+import org.ys.core.model.CoreDept;
+import org.ys.core.model.CoreRole;
+import org.ys.core.model.CoreRoleExample;
 import org.ys.core.model.CoreUser;
 import org.ys.core.model.CoreUserExample;
 import org.ys.core.model.CoreUserExample.Criteria;
+import org.ys.core.service.CoreDeptService;
+import org.ys.core.service.CoreRoleService;
 import org.ys.core.service.CoreUserService;
 
 @Controller
@@ -30,82 +36,95 @@ public class CoreUserController {
 	@Autowired
 	private CoreUserService coreUserService;
 	
-	@RequestMapping("/addUser")
-	public ModelAndView addUser()throws Exception {
-		ModelAndView modelAndView = new ModelAndView("/manager/core_user/core_user_form");
-		return modelAndView;
+	@Autowired
+	private CoreRoleService coreRoleService;
+	
+	@Autowired
+	private CoreDeptService coreDeptService;
+	
+	@RequestMapping("/coreUserList")
+	public ModelAndView coreUserList() throws Exception {
+		ModelAndView model = new ModelAndView("/manager/core_user/core_user_list");
+		return model;
 	}
 	
-	@RequestMapping("/editUser")
-	public ModelAndView editUser(String coreUserId,boolean viewFlag)throws Exception {
-		ModelAndView modelAndView = new ModelAndView("/manager/core_user/core_user_form");
-		modelAndView.addObject("coreUserId", coreUserId);
-		modelAndView.addObject("viewFlag", viewFlag);
-		return modelAndView;
+	@RequestMapping("/coreUserForm")
+	public ModelAndView coreUserForm(Long coreUserId,String actionType) throws Exception {
+		CoreUser coreUser = null;
+		if(StringUtils.equals("edit", actionType.trim())) {
+			coreUser = coreUserService.queryCoreUserById(coreUserId);
+		}else {
+			coreUser = new CoreUser();
+		}
+		String deptName = null;
+		if(null != coreUser.getCoreDeptId() && coreUser.getCoreDeptId() != 0) {
+			CoreDept coreDept = coreDeptService.queryCoreDeptById(coreUser.getCoreDeptId());
+			if(null != coreDept) {
+				deptName = coreDept.getDeptName();
+			}
+		}
+		List<CoreRole> coreRoles = coreRoleService.queryCoreRolesByExample(new CoreRoleExample());
+		ModelAndView model = new ModelAndView("/manager/core_user/core_user_form");
+		model.addObject("coreUser", coreUser);
+		model.addObject("actionType", actionType);
+		model.addObject("coreRoles", coreRoles);
+		model.addObject("deptName", deptName);
+		return model;
 	}
 	
-	@RequestMapping("/userList")
-	public ModelAndView getUserList()throws Exception {
-		ModelAndView modelAndView = new ModelAndView("/manager/core_user/core_user_list");
-		return modelAndView;
-	}
-
-	@RequestMapping("/addUserSave")
+	@RequestMapping("/saveCoreUserForm")
 	@ResponseBody
-	public Map<String,Object> addUserSave(HttpServletRequest request)throws Exception {
-		String msg = "增加用户成功！";
-		boolean success = true;
+	public Map<String,Object> saveCoreUserForm(HttpServletRequest request)throws Exception {
+		String msg = "";
+		boolean success = false;
 		try {
 			Map<String,Object> paramMap = RequsetUtils.getParamsMap(request);
-			CoreUser coreUser = new CoreUser();
+			String coreUserId = request.getParameter("coreUserId");
+			CoreUser coreUser = null;
+			if(StringUtils.isNotEmpty(coreUserId)) {
+				coreUser = coreUserService.queryCoreUserById(Long.parseLong(coreUserId));
+			}else {
+				coreUser = new CoreUser();
+			}
 			BeanUtilsBean.getInstance().getConvertUtils().register(new DateTimeConverter(), Date.class);
 			BeanUtils.populate(coreUser, paramMap);
-			coreUser.setCreatedTime(new Date());
-			coreUser.setModifiedTime(new Date());
-			coreUserService.save(coreUser);
+			if(null == coreUser.getCreatedTime()) {
+				coreUser.setCreatedTime(new Date());
+			}
+			if(null == coreUser.getModifiedTime()) {
+				coreUser.setModifiedTime(new Date());
+			}
+			String coreRoleIds = request.getParameter("coreRoleIds");
+			String[] coreRoleArr = null;;
+			if(StringUtils.isNotEmpty(coreRoleIds)) {
+				coreRoleArr = coreRoleIds.trim().split(",");
+			}
+			coreUserService.saveOrUpdateCoreUserAndRoles(coreUser, coreRoleArr);
+			msg = "操作用户成功！";
+			success = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			msg = "程序发生异常,增加用户失败！ " + e.getMessage();
+			msg = "程序发生异常,操作用户失败！ ";
 			success = false;
 		}
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("msg", msg);
 		map.put("success", success);
 		return map;
-	} 
+	}  
 	
-	@RequestMapping("/editUserSave")
+	@RequestMapping("/deleteCoreUser")
 	@ResponseBody
-	public Map<String,Object> editUserSave(HttpServletRequest request)throws Exception {
-		String msg = "修改用户成功！";
-		boolean success = true;
-		try {
-			Map<String,Object> paramMap = RequsetUtils.getParamsMap(request);
-			CoreUser coreUser = new CoreUser();
-			BeanUtilsBean.getInstance().getConvertUtils().register(new DateTimeConverter(), Date.class);
-			BeanUtils.populate(coreUser, paramMap);
-			coreUserService.updateById(coreUser);
-		} catch (Exception e) {
-			e.printStackTrace();
-			msg = "程序发生异常,修改用户失败！ " + e.getMessage();
-			success = false;
-		}
-		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("msg", msg);
-		map.put("success", success);
-		return map;
-	} 
-	
-	@RequestMapping("/deleteUser")
-	@ResponseBody
-	public Map<String,Object> deleteUser(Long coreUserId)throws Exception {
-		String msg = "删除用户成功！";
-		boolean success = true;
+	public Map<String,Object> deleteCoreUser(Long coreUserId)throws Exception {
+		String msg = "";
+		boolean success = false;
 		try {
 			coreUserService.delCoreUserById(coreUserId);
+			msg = "删除用户成功！";
+			success = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			msg = "程序发生异常,删除用户失败！ " + e.getMessage();
+			msg = "程序发生异常,删除用户失败！ ";
 			success = false;
 		}
 		Map<String,Object> map = new HashMap<String,Object>();
@@ -114,42 +133,52 @@ public class CoreUserController {
 		return map;
 	} 
 	
-	@RequestMapping("/ajaxFindUserById")
+	@RequestMapping("/ajaxFindCoreUserById")
 	@ResponseBody
-	public Map<String,Object> ajaxFindUserById(Long coreUserId)throws Exception {
-		String msg = "查找用户成功！";
-		boolean success = true;
-		CoreUser user = null;
+	public Map<String,Object> ajaxFindCoreUserById(Long coreUserId)throws Exception {
+		String msg = "";
+		boolean success = false;
+		CoreUser coreUser = null;
 		try {
-			user = coreUserService.queryCoreUserById(coreUserId);
-			
+			coreUser = coreUserService.queryCoreUserById(coreUserId);
+			msg = "查找用户成功！";
+			success = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			msg = "程序发生异常,查找用户失败！ " + e.getMessage();
+			msg = "程序发生异常,查找用户失败！ ";
 			success = false;
 		}
 		Map<String,Object> map = new HashMap<String,Object>();
 		if(success){
-			map.put("data", user);
+			map.put("data", coreUser);
 		}else{
 			map.put("errorMessage", msg);
 		}
 		map.put("success", success);
-		//Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-		//gson.toJson(map)
 		return map;
 	} 
 	
-	@RequestMapping("/userListJsonData")
+	@RequestMapping("/coreUserListJsonData")
 	@ResponseBody
-	public Map<String,Object> getUserListJsonData(HttpServletRequest request)throws Exception {
+	public Map<String,Object> coreUserListJsonData(HttpServletRequest request)throws Exception {
 		String start = request.getParameter("start");
 		String limit = request.getParameter("limit");
 		String userName = request.getParameter("userName");
 		CoreUserExample example = new CoreUserExample();
 		Criteria criteria = example.createCriteria();
 		if(StringUtils.isNotEmpty(userName)){
-			criteria.andUserNameLike(userName+"%");
+			criteria.andUserNameLike(userName.trim()+"%");
+		}
+		String coreDeptId = request.getParameter("coreDeptId");
+		if(StringUtils.isNotEmpty(coreDeptId)) {
+			Set<CoreDept> depts = coreDeptService.queryAllSubCoreDeptsByDeptId(Long.parseLong(coreDeptId.trim()));
+			if(null != depts && depts.size() > 0) {
+				List<Long> deptIds = new ArrayList<Long>();
+				for (CoreDept dept : depts) {
+					deptIds.add(dept.getCoreDeptId());
+				}
+				criteria.andCoreDeptIdIn(deptIds);
+			}
 		}
 		if(StringUtils.isEmpty(start) || StringUtils.equals(start, "0")) {
 			start = "1";
@@ -157,20 +186,18 @@ public class CoreUserController {
 		if(StringUtils.isEmpty(limit)) {
 			limit = "10";
 		}
-		List<CoreUser> users = null;
-		long count = 0;
-		PageBean<CoreUser> pageBean = coreUserService.pageCoreUsersByExample(example,Integer.parseInt(start),Integer.parseInt(limit));
+		List<CoreUser> coreUsers = null;
+		long total = 0;
+		PageBean<CoreUser> pageBean = coreUserService.pageCoreUsersByExample(example, Integer.parseInt(start.trim()), Integer.parseInt(limit.trim()));
 		if(null != pageBean) {
-			users = pageBean.getList();
-			count = pageBean.getTotal();
+			coreUsers = pageBean.getList();
+			total = pageBean.getTotal();
 		}else {
-			users = new ArrayList<CoreUser>();
+			coreUsers = new ArrayList<CoreUser>();
 		}
 		Map<String,Object> maps = new HashMap<String,Object>();
-		maps.put("count", count);
-		maps.put("root", users);
-		//Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-		//System.out.println(gson.toJson(maps));
+		maps.put("total", total);
+		maps.put("rows", coreUsers);
 		return maps;
-	}
+	}	
 }

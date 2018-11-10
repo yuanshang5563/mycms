@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.ys.common.domain.Tree;
 import org.ys.common.page.PageBean;
 import org.ys.common.utils.DateTimeConverter;
 import org.ys.common.utils.RequsetUtils;
@@ -61,9 +62,9 @@ public class CoreDeptController {
 		return model;
 	}
 	
-	@RequestMapping("/coreDeptFormSave")
+	@RequestMapping("/saveCoreDeptForm")
 	@ResponseBody
-	public Map<String,Object> coreDeptFormSave(HttpServletRequest request)throws Exception {
+	public Map<String,Object> saveCoreDeptForm(HttpServletRequest request)throws Exception {
 		String msg = "";
 		boolean success = false;
 		try {
@@ -192,4 +193,17 @@ public class CoreDeptController {
 		}
 		return deptList;
 	}	
+	
+	@RequestMapping("/coreDeptTreeJson")
+	@ResponseBody
+	public Tree<CoreDept> coreDeptTreeJson()throws Exception {
+		CoreDeptExample example = new CoreDeptExample();
+		Tree<CoreDept> tree = coreDeptService.getCoreDeptTree(example);
+		return tree;
+	}
+	
+	@RequestMapping("/coreDeptTree")
+	public String coreDeptTree()throws Exception {
+		return "/manager/core_dept/core_dept_tree";
+	}
 }

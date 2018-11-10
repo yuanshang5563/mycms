@@ -187,7 +187,7 @@
             <iframe class="J_iframe" name="iframe0" width="100%" height="100%" 
             src="${root}/manager/core/CoreManagerController/index"  frameborder="0" data-id="main.jsp" seamless></iframe>
         </div>
-		<%@include file="/commons/footer.jsp"%>
+        <%@include file="/commons/footer.jsp"%>
     </div>
     <!--右侧部分结束-->
     <!--右侧边栏开始-->
@@ -260,7 +260,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

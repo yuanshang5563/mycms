@@ -9,12 +9,12 @@
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
-	<script type="text/javascript" src="${root}/commons/js/manager/core_user/core_user_list.js"></script> 
+	<script type="text/javascript" src="${root}/commons/js/appjs/manager/core_user/core_user_list.js"></script> 
   </head>
 <body class="gray-bg">
 	<div class="wrapper wrapper-content ">
 		<div class="row">
-			<div class="col-sm-3">
+			<div class="col-sm-2">
 				<div class="ibox ibox-body">
 					<div class="ibox-title">
 						<h5>选择部门</h5>
@@ -24,7 +24,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-sm-8">
+			<div class="col-sm-10">
 				<div class="ibox">
 					<div class="ibox-body">
 						<div class="fixed-table-toolbar">
@@ -38,13 +38,12 @@
 							</div>
 
 							<div class="columns pull-right col-md-2 nopadding">
-								<input id="userName" type="text" class="form-control" placeholder="姓名">
+								<input id="userName" name="userName" type="text" class="form-control" placeholder="姓名">
 							</div>
 						</div>
-						<table id="coreUserTable" data-mobile-responsive="true">
-						</table>
-						<input type="hidden" value="${root}" id="basePathUrl">
+						<table id="coreUserTable" data-mobile-responsive="true"></table>
 					</div>
+					<input type="hidden" value="${root}" id="basePathUrl">
 				</div>
 			</div>
 		</div>

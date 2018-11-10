@@ -4,10 +4,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.ys.common.page.PageBean;
 import org.ys.core.dao.CoreRoleMapper;
 import org.ys.core.model.CoreRole;
 import org.ys.core.model.CoreRoleExample;
 import org.ys.core.service.CoreRoleService;
+
+import com.github.pagehelper.PageHelper;
 
 @Service("coreRoleService")
 public class CoreRoleServiceImpl implements CoreRoleService {
@@ -56,6 +59,16 @@ public class CoreRoleServiceImpl implements CoreRoleService {
 			return null;
 		}
 		return coreRoleMapper.selectByExample(example);
+	}
+
+	@Override
+	public PageBean<CoreRole> pageCoreRolesByExample(CoreRoleExample example, int pageNum, int pageSize) throws Exception {
+		if(null == example) {
+			return null;
+		}
+		PageHelper.startPage(pageNum, pageSize, true);
+		List<CoreRole> roles = coreRoleMapper.selectByExample(example);
+		return new PageBean<CoreRole>(roles);
 	}
 
 }

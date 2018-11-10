@@ -2,6 +2,7 @@ package org.ys.core.service;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -65,6 +66,20 @@ public class TestCoreMenuService {
 	public void testdelMenu() {
 		try {
 			coreMenuService.delCoreMenuById(11l);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void queryAllSubCoreMenusByMenuId() {
+		try {
+			Set<CoreMenu> menus = coreMenuService.queryAllSubCoreMenusByMenuId(2l);
+			if(null != menus) {
+				for (CoreMenu menu : menus) {
+					System.out.println(menu.getMenuName());
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

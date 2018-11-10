@@ -10,7 +10,7 @@ function coreMenuFormSave() {
 		$.ajax({
 			cache : true,
 			type : "POST",
-			url : prefix + "/coreMenuFormSave",
+			url : prefix + "/saveCoreMenuForm",
 			data : $('#coreMenuForm').serialize(),
 			async : false,
 			error : function(request) {

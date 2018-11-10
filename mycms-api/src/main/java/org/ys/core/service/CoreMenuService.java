@@ -23,7 +23,7 @@ public interface CoreMenuService {
 	
 	public List<CoreMenu> queryCoreMenusByParentId(Long parentId) throws Exception;
 	
-	public Set<CoreMenu> queryAllSubCoreMensByParentId(Long parentId) throws Exception;
+	public Set<CoreMenu> queryAllSubCoreMenusByMenuId(Long coreMenuId) throws Exception;
 	
 	public PageBean<CoreMenu> pageCoreMenusByExample(CoreMenuExample example,int pageNum,int pageSize) throws Exception;
 	
