@@ -21,8 +21,6 @@
 					</div>
 					<div class="ibox-content">
 						<form class="form-horizontal m-t" id="coreRoleForm">
-							<input id="userId" name="userId" type="hidden"> 
-							<input id="menuIds" name="menuIds" type="hidden">
 							<div class="form-group">
 								<label class="col-sm-3 control-label">角色名：</label>
 								<div class="col-sm-8">
@@ -30,23 +28,24 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-3 control-label">备注：</label>
+								<label class="col-sm-3 control-label">角色：</label>
 								<div class="col-sm-8">
-									<input id="remark" name="remark" class="form-control" type="text">
+									<input id="role" name="role" class="form-control" type="text" value="${coreRole.role}">
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-3 control-label">菜单权限：</label>
 								<div class="col-sm-8">
-									<div id="menuTree"></div>
+									<div id="coreMenuTree"></div>
 								</div>
 							</div>
 							<div class="form-group">
 								<div class="col-sm-8 col-sm-offset-3">
+									<input id="coreMenuIds" name="coreMenuIds" type="hidden">
 								  	<input type="hidden" value="${root}" id="basePathUrl">
 								  	<input type="hidden" value="${coreRole.coreRoleId}" name="coreRoleId" id="coreRoleId">
-								  	<input type="hidden" value="${viewFlag}" id="viewFlag">								
-									<button type="submit" class="btn btn-primary">提交</button>
+								  	<input type="hidden" value="${actionType}" id="actionType">							
+									<button type="button" class="btn btn-primary" onclick="coreRoleFormSave()">提交</button>
 								</div>
 							</div>
 						</form>

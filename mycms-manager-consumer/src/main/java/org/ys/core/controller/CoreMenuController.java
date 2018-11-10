@@ -16,9 +16,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.ys.common.domain.Tree;
 import org.ys.common.page.PageBean;
 import org.ys.common.utils.DateTimeConverter;
 import org.ys.common.utils.RequsetUtils;
+import org.ys.core.model.CoreDept;
+import org.ys.core.model.CoreDeptExample;
 import org.ys.core.model.CoreMenu;
 import org.ys.core.model.CoreMenuExample;
 import org.ys.core.model.CoreMenuExample.Criteria;
@@ -188,4 +191,21 @@ public class CoreMenuController {
 		}
 		return menuList;
 	}	
+	
+	@RequestMapping("/coreMenuTreeJson")
+	@ResponseBody
+	public Tree<CoreMenu> coreMenuTreeJson()throws Exception {
+		Tree<CoreMenu> tree = coreMenuService.getCoreMenuTree();
+		return tree;
+	}
+	
+	@RequestMapping("/coreMenuTreeJsonByRoleId")
+	@ResponseBody
+	public Tree<CoreMenu> coreMenuTreeJsonByRoleId(String coreRoleId)throws Exception {
+		Tree<CoreMenu> tree = null;
+		if(StringUtils.isNotEmpty(coreRoleId)) {
+			tree = coreMenuService.getCoreMenuTreeByRoleId(Long.parseLong(coreRoleId));
+		}
+		return tree;
+	}
 }

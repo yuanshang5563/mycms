@@ -95,4 +95,6 @@ public interface CoreMenuMapper {
     int updateByPrimaryKey(CoreMenu record);
     
     List<CoreMenu> listCoreMenusByUserId(Long coreUserId);
+    
+    List<CoreMenu> listCoreMenusByRoleId(Long coreRoleId);
 }

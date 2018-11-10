@@ -145,4 +145,62 @@ public class CoreMenuServiceImpl implements CoreMenuService{
 		return list;
 	}
 
+	@Override
+	public Tree<CoreMenu> getCoreMenuTree() throws Exception {
+		List<Tree<CoreMenu>> trees = new ArrayList<Tree<CoreMenu>>();
+		List<CoreMenu> allCoreMenus = coreMenuMapper.selectByExample(new CoreMenuExample());
+		for (CoreMenu coreMenu : allCoreMenus) {
+			Tree<CoreMenu> tree = new Tree<CoreMenu>();
+			tree.setId(coreMenu.getCoreMenuId().toString());
+			if(null != coreMenu.getParentCoreMenuId()) {
+				tree.setParentId(coreMenu.getParentCoreMenuId().toString());
+			}
+			tree.setText(coreMenu.getMenuName());
+			trees.add(tree);
+		}
+		// 默认顶级菜单为０，根据数据库实际情况调整
+		Tree<CoreMenu> tree = BuildTree.build(trees);
+		return tree;
+	}
+
+	@Override
+	public Tree<CoreMenu> getCoreMenuTreeByRoleId(Long coreRoleId) {
+		if(null == coreRoleId) {
+			return null;
+		}
+		// 根据roleId查询权限
+		List<CoreMenu> menus =  coreMenuMapper.selectByExample(new CoreMenuExample());
+		List<CoreMenu> roleMenus = coreMenuMapper.listCoreMenusByRoleId(coreRoleId);
+		Set<Long> roleMenuIds = new HashSet<Long>();
+		for (CoreMenu roleMenu : roleMenus) {
+			roleMenuIds.add(roleMenu.getCoreMenuId());
+		}
+		//只留下叶子节点
+		for (CoreMenu roleMenu : roleMenus) {
+			if(roleMenuIds.contains(roleMenu.getParentCoreMenuId())) {
+				roleMenuIds.remove(roleMenu.getParentCoreMenuId());
+			}
+		}
+		List<Tree<CoreMenu>> trees = new ArrayList<Tree<CoreMenu>>();
+		for (CoreMenu coreMenu : menus) {
+			Tree<CoreMenu> tree = new Tree<CoreMenu>();
+			tree.setId(coreMenu.getCoreMenuId().toString());
+			if(null != coreMenu.getParentCoreMenuId()) {
+				tree.setParentId(coreMenu.getParentCoreMenuId().toString());
+			}
+			tree.setText(coreMenu.getMenuName());
+			Map<String, Object> state = new HashMap<>();
+			if (roleMenuIds.contains(coreMenu.getCoreMenuId())) {
+				state.put("selected", true);
+			} else {
+				state.put("selected", false);
+			}
+			tree.setState(state);
+			trees.add(tree);
+		}
+		// 默认顶级菜单为０，根据数据库实际情况调整
+		Tree<CoreMenu> tree = BuildTree.build(trees);
+		return tree;
+	}
+
 }

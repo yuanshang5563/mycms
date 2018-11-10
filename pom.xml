@@ -44,11 +44,6 @@
 		    <groupId>org.apache.shiro</groupId>
 		    <artifactId>shiro-spring</artifactId>
 		    <version>${shiro.version}</version>
-		</dependency>	
-		<dependency>
-		    <groupId>org.apache.shiro</groupId>
-		    <artifactId>shiro-spring</artifactId>
-		    <version>${shiro.version}</version>
 		</dependency>			
 		<!-- spring核心包 -->
 		<dependency>

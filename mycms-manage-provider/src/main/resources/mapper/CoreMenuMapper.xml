@@ -318,8 +318,13 @@
   </update>
   
   <select id="listCoreMenusByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
- 	select m.* from core_menu m join core_role_menu rm on m.core_menu_id=rm.core_menu_id
-	JOIN core_user_role ur on ur.core_role_id
+ 	select DISTINCT m.* from core_menu m inner join core_role_menu rm on m.core_menu_id=rm.core_menu_id
+	inner join core_user_role ur on ur.core_role_id
 	where m.menu_type in ('0','1') and ur.core_user_id=#{coreUserId} 
+  </select>
+  
+  <select id="listCoreMenusByRoleId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+ 	select DISTINCT m.* from core_menu m  inner join core_role_menu rm on m.core_menu_id=rm.core_menu_id
+	where rm.core_role_id=#{coreRoleId} 
   </select>
 </mapper>

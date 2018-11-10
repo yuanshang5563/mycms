@@ -1,37 +1,40 @@
-//var menuTree;
-
-var menuIds;
+var basePathUrl = "";
+var prefix = ""
+var coreMenuIds;
 $(function() {
+	basePathUrl = $("#basePathUrl").val();
+	prefix = basePathUrl + "/manager/core/CoreRoleController";
 	getMenuTreeData();
-	validateRule();
-});
-$.validator.setDefaults({
-	submitHandler : function() {
-		getAllSelectNodes();
-		save();
-	}
 });
 
 function getAllSelectNodes() {
-	var ref = $('#menuTree').jstree(true); // 获得整个树
+	var ref = $('#coreMenuTree').jstree(true); // 获得整个树
 
-	menuIds = ref.get_selected(); // 获得所有选中节点的，返回值为数组
+	coreMenuIds = ref.get_selected(); // 获得所有选中节点的，返回值为数组
 
-	$("#menuTree").find(".jstree-undetermined").each(function(i, element) {
-		menuIds.push($(element).closest('.jstree-node').attr("id"));
+	$("#coreMenuTree").find(".jstree-undetermined").each(function(i, element) {
+		coreMenuIds.push($(element).closest('.jstree-node').attr("id"));
 	});
 }
+
 function getMenuTreeData() {
+	var actionType = $("#actionType").val();
+	var queryUrl = basePathUrl+"/manager/core/CoreMenuController/coreMenuTreeJson";
+	if(actionType == 'edit'){
+		var coreRoleId = $("#coreRoleId").val();
+		queryUrl = basePathUrl+"/manager/core/CoreMenuController/coreMenuTreeJsonByRoleId?coreRoleId="+coreRoleId;
+	}
 	$.ajax({
 		type : "GET",
-		url : "/sys/menu/tree",
+		url : queryUrl,
 		success : function(menuTree) {
 			loadMenuTree(menuTree);
 		}
 	});
 }
+
 function loadMenuTree(menuTree) {
-	$('#menuTree').jstree({
+	$('#coreMenuTree').jstree({
 		'core' : {
 			'data' : menuTree
 		},
@@ -40,50 +43,50 @@ function loadMenuTree(menuTree) {
 		},
 		"plugins" : [ "wholerow", "checkbox" ]
 	});
-	//$('#menuTree').jstree("open_all");
+	$('#coreMenuTree').jstree("open_all");
 
 }
 
-function save() {
-	$('#menuIds').val(menuIds);
-	var role = $('#signupForm').serialize();
-	$.ajax({
-		cache : true,
-		type : "POST",
-		url : "/sys/role/save",
-		data : role, // 你的formid
+function coreRoleFormSave() {
+	if(validateRoleForm()){
+		getAllSelectNodes();
+		$('#coreMenuIds').val(coreMenuIds);
+		$.ajax({
+			cache : true,
+			type : "POST",
+			url : prefix + "/saveCoreRoleForm",
+			data : $('#coreRoleForm').serialize(),
+			async : false,
+			error : function(request) {
+				laryer.alert("连接错误");
+			},
+			success : function(data) {
+				if (data.success == 1) {
+					parent.layer.msg(data.msg);
+					parent.reLoad();
+					var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+					parent.layer.close(index);
 
-		async : false,
-		error : function(request) {
-			alert("Connection error");
-		},
-		success : function(data) {
-			if (data.code == 0) {
-				parent.layer.msg("操作成功");
-				parent.reLoad();
-				var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
-
-				parent.layer.close(index);
-
-			} else {
-				parent.layer.msg(data.msg);
+				} else {
+					layer.alert(data.msg)
+				}
 			}
-		}
-	});
+		});		
+	}
 }
 
-function validateRule() {
-	var icon = "<i class='fa fa-times-circle'></i> ";
-	$("#signupForm").validate({
-		rules : {
-			roleName : {
-				required : true
-			}
-		},
-		messages : {
-			roleName : {
-				required : icon + "请输入角色名"
-			}
-		}
-	});
+function validateRoleForm() {
+	var roleName = $("#roleName").val();
+	if(roleName == ''){
+		alert("角色名称必填！");
+		$("#roleName").focus();
+		return false;
+	}
+	var role = $("#role").val();
+	if(role == ''){
+		alert("角色必填！");
+		$("#role").focus();
+		return false;
+	}
+	return true;
 }

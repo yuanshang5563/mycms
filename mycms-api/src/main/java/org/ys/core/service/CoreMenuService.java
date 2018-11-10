@@ -28,4 +28,8 @@ public interface CoreMenuService {
 	public PageBean<CoreMenu> pageCoreMenusByExample(CoreMenuExample example,int pageNum,int pageSize) throws Exception;
 	
 	public List<Tree<CoreMenu>> listMenuTreeByUserId(Long coreUserId);
+	
+	public Tree<CoreMenu> getCoreMenuTreeByRoleId(Long coreRoleId);
+	
+	public Tree<CoreMenu> getCoreMenuTree() throws Exception;
 }

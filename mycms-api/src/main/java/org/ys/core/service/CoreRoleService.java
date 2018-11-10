@@ -20,4 +20,6 @@ public interface CoreRoleService {
 	public List<CoreRole>queryCoreRolesByExample(CoreRoleExample example) throws Exception;	
 	
 	public PageBean<CoreRole> pageCoreRolesByExample(CoreRoleExample example,int pageNum,int pageSize) throws Exception;
+	
+	public void saveOrUpdateCoreRoleAndCoreMenu(CoreRole coreRole,String[] coreMenuIdArr) throws Exception;
 }

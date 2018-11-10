@@ -35,7 +35,7 @@ function validateMenuForm() {
 	var menuName = $("#menuName").val();
 	if(menuName == ''){
 		alert("菜单名称必填！");
-		$("#menuName").fcous();
+		$("#menuName").focus();
 		return false;
 	}
 	var menuType = $("input[name='menuType']:checked").val(); 

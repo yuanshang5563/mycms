@@ -2,12 +2,15 @@ package org.ys.core.service.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.ys.common.page.PageBean;
 import org.ys.core.dao.CoreRoleMapper;
+import org.ys.core.dao.CoreRoleMenuMapper;
 import org.ys.core.model.CoreRole;
 import org.ys.core.model.CoreRoleExample;
+import org.ys.core.model.CoreRoleMenu;
 import org.ys.core.service.CoreRoleService;
 
 import com.github.pagehelper.PageHelper;
@@ -16,6 +19,9 @@ import com.github.pagehelper.PageHelper;
 public class CoreRoleServiceImpl implements CoreRoleService {
 	@Autowired
 	private CoreRoleMapper coreRoleMapper;
+	
+	@Autowired
+	private CoreRoleMenuMapper coreRoleMenuMapper;
 
 	@Override
 	public CoreRole queryCoreRoleById(Long coreRoleId) throws Exception {
@@ -69,6 +75,29 @@ public class CoreRoleServiceImpl implements CoreRoleService {
 		PageHelper.startPage(pageNum, pageSize, true);
 		List<CoreRole> roles = coreRoleMapper.selectByExample(example);
 		return new PageBean<CoreRole>(roles);
+	}
+
+	@Override
+	public void saveOrUpdateCoreRoleAndCoreMenu(CoreRole coreRole, String[] coreMenuIdArr) throws Exception {
+		if(null != coreRole) {
+			if(null == coreRole.getCoreRoleId() || coreRole.getCoreRoleId() == 0) {
+				coreRoleMapper.insert(coreRole);
+			}else {
+				coreRoleMapper.updateByPrimaryKey(coreRole);
+			}
+			//更新角色菜单映射
+			if(null != coreMenuIdArr && coreMenuIdArr.length > 0) {
+				coreRoleMenuMapper.delCoreRoleMenuByRoleId(coreRole.getCoreRoleId());
+				for (String coreMenuId : coreMenuIdArr) {
+					if(StringUtils.isNotEmpty(coreMenuId)) {
+						CoreRoleMenu coreRoleMenu = new CoreRoleMenu();
+						coreRoleMenu.setCoreMenuId(Long.parseLong(coreMenuId.trim()));
+						coreRoleMenu.setCoreRoleId(coreRole.getCoreRoleId());
+						coreRoleMenuMapper.insertCoreRoleMenu(coreRoleMenu);
+					}
+				}
+			}
+		}
 	}
 
 }

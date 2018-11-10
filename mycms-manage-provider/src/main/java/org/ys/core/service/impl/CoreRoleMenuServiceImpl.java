@@ -1,5 +1,6 @@
 package org.ys.core.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.ys.core.dao.CoreRoleMenuMapper;
 import org.ys.core.model.CoreRoleMenu;
@@ -7,6 +8,7 @@ import org.ys.core.service.CoreRoleMenuService;
 
 @Service("coreRoleMenuService")
 public class CoreRoleMenuServiceImpl implements CoreRoleMenuService {
+	@Autowired
 	private CoreRoleMenuMapper coreRoleMenuMapper;
 
 	@Override

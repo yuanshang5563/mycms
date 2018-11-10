@@ -88,13 +88,15 @@ function load(coreDeptId) {
 			},{
 				field : 'email',
 				title : '邮箱'
-			},{
-				field : 'createdTime',
-				title : '创建时间'
-			},{
-				field : 'modifiedTime',
-				title : '修改时间'
-			},{
+			},
+//			{
+//				field : 'createdTime',
+//				title : '创建时间'
+//			},{
+//				field : 'modifiedTime',
+//				title : '修改时间'
+//			},
+			{
 				field : 'status',
 				title : '状态',
 				align : 'center',

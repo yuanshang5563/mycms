@@ -8,7 +8,7 @@
     <meta charset="utf-8">
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="expires" content="0">   
 	<script type="text/javascript" src="${root}/commons/js/appjs/manager/core_role/core_role_list.js"></script> 
   </head>
 <body class="gray-bg">
@@ -16,12 +16,22 @@
 		<div class="col-sm-12">
 			<div class="ibox">
 				<div class="ibox-body">
-					<div id="coreRoleToolbar" role="group">
-						<button type="button" class="btn btn-primary" onclick="add()">
-							<i class="fa fa-plus" aria-hidden="true"></i>添加
-						</button>
-					</div>
+					<div class="fixed-table-toolbar">
+						<div class="columns pull-left">
+							<button type="button" class="btn  btn-primary" onclick="add()">
+								<i class="fa fa-plus hidden" aria-hidden="true"></i>添加
+							</button>
+						</div>
+						<div class="columns pull-right">
+							<button class="btn btn-success" onclick="reLoad()">查询</button>
+						</div>
+
+						<div class="columns pull-right col-md-2 nopadding">
+							<input id="roleName" name="roleName" type="text" class="form-control" placeholder="角色名">
+						</div>
+					</div>									
 					<table id="coreRoleTable" data-mobile-responsive="true"></table>
+					<input type="hidden" value="${root}" id="basePathUrl">
 				</div>
 			</div>
 		</div>

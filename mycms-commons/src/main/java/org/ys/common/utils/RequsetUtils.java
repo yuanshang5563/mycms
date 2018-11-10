@@ -20,7 +20,7 @@ public class RequsetUtils {
 		Map<String,Object> paramMap = new HashMap<String,Object>();
 		while(enu.hasMoreElements()){  
 			String paraName=(String)enu.nextElement();  
-			System.out.println(paraName+": "+request.getParameter(paraName)); 
+			//System.out.println(paraName+": "+request.getParameter(paraName)); 
 			if(StringUtils.isNotEmpty(paraName)){
 				paramMap.put(paraName, request.getParameter(paraName));
 			}

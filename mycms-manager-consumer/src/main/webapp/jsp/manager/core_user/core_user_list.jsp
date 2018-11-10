@@ -14,7 +14,7 @@
 <body class="gray-bg">
 	<div class="wrapper wrapper-content ">
 		<div class="row">
-			<div class="col-sm-2">
+			<div class="col-sm-3">
 				<div class="ibox ibox-body">
 					<div class="ibox-title">
 						<h5>选择部门</h5>
@@ -24,7 +24,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-sm-10">
+			<div class="col-sm-9">
 				<div class="ibox">
 					<div class="ibox-body">
 						<div class="fixed-table-toolbar">

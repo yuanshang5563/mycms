@@ -61,26 +61,26 @@ function validateUserForm() {
 	var realName = $("#realName").val();
 	if(realName == ''){
 		alert("姓名必填！");
-		$("#realName").fcous();
+		$("#realName").focus();
 		return false;
 	}
 	var userName = $("#userName").val();
 	if(userName == ''){
 		alert("用户名必填！");
-		$("#userName").fcous();
+		$("#userName").focus();
 		return false;
 	}
 	if($("#password").length > 0){
 		var password = $("#password").val();
 		if(password == ''){
 			alert("密码必填！");
-			$("#password").fcous();
+			$("#password").focus();
 			return false;
 		}
 		var comfirmPassword = $("#comfirmPassword").val();
 		if(comfirmPassword == ''){
 			alert("确认密码必填！");
-			$("#comfirmPassword").fcous();
+			$("#comfirmPassword").focus();
 			return false;
 		}	
 		if(password != comfirmPassword){
@@ -96,19 +96,19 @@ function validateUserForm() {
 	var mobile = $("#mobile").val();
 	if(mobile == ''){
 		alert("手机必填！");
-		$("#mobile").fcous();
+		$("#mobile").focus();
 		return false;
 	}
 	var email = $("#email").val();
 	if(email == ''){
 		alert("email必填！");
-		$("#email").fcous();
+		$("#email").focus();
 		return false;
 	}
 	var coreDeptId = $("#coreDeptId").val();
 	if(coreDeptId == ''){
 		alert("部门必选！");
-		$("#coreDeptId").fcous();
+		$("#coreDeptId").focus();
 		return false;
 	}
 	var status = $("input[name='status']:checked").val(); 

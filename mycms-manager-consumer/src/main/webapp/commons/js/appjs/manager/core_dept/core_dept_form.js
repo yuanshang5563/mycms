@@ -35,13 +35,13 @@ function validateDeptForm() {
 	var deptName = $("#deptName").val();
 	if(deptName == ''){
 		alert("部门名称必填！");
-		$("#deptName").fcous();
+		$("#deptName").focus();
 		return false;
 	}
 	var deptCode = $("#deptCode").val();
 	if(deptCode == ''){
 		alert("部门代码必填！");
-		$("#deptCode").fcous();
+		$("#deptCode").focus();
 		return false;
 	}
 	return true;

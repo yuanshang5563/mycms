@@ -48,6 +48,7 @@ public class CoreRoleController {
 		ModelAndView model = new ModelAndView("/manager/core_role/core_role_form");
 		model.addObject("actionType", actionType);
 		model.addObject("coreRole", coreRole);
+		model.addObject("actionType", actionType);
 		return model;
 	}
 	
@@ -73,9 +74,30 @@ public class CoreRoleController {
 			if(null == coreRole.getModifiedTime()) {
 				coreRole.setModifiedTime(new Date());
 			}
-			coreRoleService.save(coreRole);
-			msg = "操作角色成功！";
-			success = true;
+			String coreMenuIds = request.getParameter("coreMenuIds");
+			String[] coreMenuIdArr = null;
+			if(StringUtils.isNoneEmpty(coreMenuIds)) {
+				coreMenuIdArr = coreMenuIds.trim().split(",");
+			}
+			
+			boolean existFlag = false;
+			String role = coreRole.getRole();
+			if(StringUtils.isNotEmpty(role)) {
+				CoreRoleExample example = new CoreRoleExample();
+				example.createCriteria().andRoleEqualTo(role);
+				List<CoreRole> coreRoleList = coreRoleService.queryCoreRolesByExample(example);
+				if(null != coreRoleList && coreRoleList.size() > 0) {
+					existFlag = true;
+				}
+			}
+			if(!existFlag) {
+				coreRoleService.saveOrUpdateCoreRoleAndCoreMenu(coreRole, coreMenuIdArr);
+				msg = "操作角色成功！";
+				success = true;
+			}else {
+				msg = "操作角色失败，已存在相同名字的角色！";
+				success = false;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			msg = "程序发生异常,操作角色失败！ ";
@@ -141,7 +163,7 @@ public class CoreRoleController {
 		CoreRoleExample example = new CoreRoleExample();
 		Criteria criteria = example.createCriteria();
 		if(StringUtils.isNotEmpty(roleName)){
-			criteria.andRoleNameLike(roleName.trim()+"%");
+			criteria.andRoleNameLike("%"+roleName.trim()+"%");
 		}
 		if(StringUtils.isEmpty(start) || StringUtils.equals(start, "0")) {
 			start = "1";
