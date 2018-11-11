@@ -68,34 +68,7 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.30</version>
-		</dependency>
-		<dependency>
-		    <groupId>com.alibaba</groupId>
-		    <artifactId>dubbo</artifactId>
-		    <version>2.6.4</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.apache.zookeeper</groupId>
-		    <artifactId>zookeeper</artifactId>
-		    <version>3.4.13</version>
 		</dependency>	
-	    <dependency>
-	    	<groupId>org.apache.geronimo.bundles</groupId>
-	      	<artifactId>aspectjweaver</artifactId>
-	      	<version>1.6.8_2</version>
-	    </dependency>
-        <dependency>
-            <groupId>org.apache.curator</groupId>
-            <artifactId>curator-framework</artifactId>
-            <!--  
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.zookeeper</groupId>
-                    <artifactId>zookeeper</artifactId>
-                </exclusion>
-            </exclusions>-->
-            <version>4.0.1</version>
-        </dependency>	
 		<dependency>
 		    <groupId>org.apache.commons</groupId>
 		    <artifactId>commons-lang3</artifactId>

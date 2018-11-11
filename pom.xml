@@ -67,7 +67,35 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
-		</dependency>		
+		</dependency>	
+		
+		<dependency>
+		    <groupId>com.alibaba</groupId>
+		    <artifactId>dubbo</artifactId>
+		    <version>2.6.4</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.zookeeper</groupId>
+		    <artifactId>zookeeper</artifactId>
+		    <version>3.4.13</version>
+		</dependency>	
+	    <dependency>
+	    	<groupId>org.apache.geronimo.bundles</groupId>
+	      	<artifactId>aspectjweaver</artifactId>
+	      	<version>1.6.8_2</version>
+	    </dependency>
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-framework</artifactId>
+            <!--  
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.zookeeper</groupId>
+                    <artifactId>zookeeper</artifactId>
+                </exclusion>
+            </exclusions>-->
+            <version>4.0.1</version>
+        </dependency>				
 	</dependencies>
 
 	<build>
@@ -88,6 +116,8 @@
 		<module>mycms-manage-provider</module>
 		<module>mycms-web-consumer</module>
 		<module>mycms-mybatis-genertor</module>
-    <module>mycms-manager-consumer</module>
-  </modules>
+    	<module>mycms-manager-consumer</module>
+    	<module>mycms-session-api</module>
+    	<module>mycms-session-provider</module>
+	</modules>
 </project>
