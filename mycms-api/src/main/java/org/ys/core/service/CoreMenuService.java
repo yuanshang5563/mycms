@@ -32,4 +32,6 @@ public interface CoreMenuService {
 	public Tree<CoreMenu> getCoreMenuTreeByRoleId(Long coreRoleId);
 	
 	public Tree<CoreMenu> getCoreMenuTree() throws Exception;
+	
+	public List<CoreMenu> listCoreMenusByUserId(Long coreUserId);
 }

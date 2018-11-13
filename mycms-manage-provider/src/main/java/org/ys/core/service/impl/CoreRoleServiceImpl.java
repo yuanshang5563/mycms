@@ -100,4 +100,11 @@ public class CoreRoleServiceImpl implements CoreRoleService {
 		}
 	}
 
+	@Override
+	public List<CoreRole> listCoreRolesByUserId(Long coreUserId) {
+		if(null == coreUserId) {
+			return null;
+		}
+		return coreRoleMapper.listCoreRolesByUserId(coreUserId);
+	}
 }

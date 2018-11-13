@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.ys.common.domain.Tree;
 import org.ys.common.page.PageBean;
-import org.ys.common.utils.BuildTree;
+import org.ys.common.utils.BuildTreeUtil;
 import org.ys.core.dao.CoreDeptMapper;
 import org.ys.core.model.CoreDept;
 import org.ys.core.model.CoreDeptExample;
@@ -99,7 +99,7 @@ public class CoreDeptServiceImpl implements CoreDeptService {
 			trees.add(tree);
 		}
 		// 默认顶级菜单为０，根据数据库实际情况调整
-		Tree<CoreDept> tree = BuildTree.build(trees);
+		Tree<CoreDept> tree = BuildTreeUtil.build(trees);
 		return tree;
 	}
 	

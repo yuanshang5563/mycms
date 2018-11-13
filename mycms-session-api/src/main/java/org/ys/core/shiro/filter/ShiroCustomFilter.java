@@ -17,6 +17,7 @@ public class ShiroCustomFilter implements Filter {
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
         if(invoker.getInterface().equals(RemoteSessionService.class)){
             //去获取信息
+        	
         }else{
             //追加补充信息
             String sessionId = "";

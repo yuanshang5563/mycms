@@ -22,4 +22,6 @@ public interface CoreRoleService {
 	public PageBean<CoreRole> pageCoreRolesByExample(CoreRoleExample example,int pageNum,int pageSize) throws Exception;
 	
 	public void saveOrUpdateCoreRoleAndCoreMenu(CoreRole coreRole,String[] coreMenuIdArr) throws Exception;
+	
+	public List<CoreRole> listCoreRolesByUserId(Long coreUserId);
 }

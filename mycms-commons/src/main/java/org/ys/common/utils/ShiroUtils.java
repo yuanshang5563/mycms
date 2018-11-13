@@ -5,6 +5,7 @@ import org.apache.shiro.subject.Subject;
 import org.ys.core.model.CoreUser;
 
 public class ShiroUtils {
+	private ShiroUtils() {}
 
 	public static Subject getSubjct() {
 		return SecurityUtils.getSubject();

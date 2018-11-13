@@ -1,6 +1,7 @@
 package org.ys.core.shiro.session;
 
 import org.apache.shiro.session.Session;
+import org.ys.core.shiro.common.PermissionContext;
 
 import java.io.Serializable;
 
@@ -42,5 +43,5 @@ public interface RemoteSessionService {
 	 * @param identify
 	 * @return
 	 */
-	//PermissionContext getPermissions(String identify);
+	PermissionContext getPermissions(String identify);
 }

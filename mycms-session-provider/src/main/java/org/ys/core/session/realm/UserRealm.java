@@ -1,5 +1,7 @@
 package org.ys.core.session.realm;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -10,24 +12,56 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.CredentialsException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.ys.core.model.CoreMenu;
+import org.ys.core.model.CoreRole;
 import org.ys.core.model.CoreUser;
 import org.ys.core.model.CoreUserExample;
 import org.ys.core.model.CoreUserExample.Criteria;
+import org.ys.core.service.CoreMenuService;
+import org.ys.core.service.CoreRoleService;
 import org.ys.core.service.CoreUserService;
 
-public class UserRealm extends AuthorizingRealm{
+public class UserRealm extends AuthorizingRealm implements Serializable{
+	private static final long serialVersionUID = -6687721711713331365L;
+
 	@Autowired
 	private CoreUserService coreUserService;
 	
+	@Autowired
+	private CoreRoleService coreRoleService;
+	
+	@Autowired
+	private CoreMenuService coreMenuService;
+	
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-		//principals.get
-		return null;
+		CoreUser coreUser = (CoreUser) principals.getPrimaryPrincipal();
+		List<String> roles = new ArrayList<String>();
+		List<String> permissions = new ArrayList<String>();
+		//如果用户不为空，从数据库中获取相关权限和角色
+		if(null != coreUser) {
+			List<CoreRole> coreRoles = coreRoleService.listCoreRolesByUserId(coreUser.getCoreUserId());
+			if(null != coreRoles && coreRoles.size() > 0) {
+				for (CoreRole coreRole : coreRoles) {
+					roles.add(coreRole.getRole());
+				}
+			}
+			List<CoreMenu> coreMenus = coreMenuService.listCoreMenusByUserId(coreUser.getCoreUserId());
+			if(null != coreMenus && coreMenus.size() > 0) {
+				for (CoreMenu coreMenu : coreMenus) {
+					permissions.add(coreMenu.getPermission());
+				}
+			}
+		}
+		SimpleAuthorizationInfo auth = new SimpleAuthorizationInfo();
+		auth.addRoles(roles);
+		auth.addStringPermissions(permissions);
+		return auth;
 	}
 
 	@Override

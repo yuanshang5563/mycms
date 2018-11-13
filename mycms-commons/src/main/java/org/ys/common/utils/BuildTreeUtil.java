@@ -7,7 +7,8 @@ import java.util.Map;
 
 import org.ys.common.domain.Tree;
 
-public class BuildTree {
+public class BuildTreeUtil {
+	private BuildTreeUtil() {}
 
 	public static <T> Tree<T> build(List<Tree<T>> nodes) {
 

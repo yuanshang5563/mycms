@@ -17,23 +17,23 @@
 
     <!-- 会话ID生成器 -->
     <bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/>
-
+	<!--
     <bean id="limitRetryHashedMatcher" class="com.lenxeon.ucenter.session.shiro.local.LimitRetryHashedMatcher">
-        <!--这个配置要和PassWordUtils里一致-->
+                        这个配置要和PassWordUtils里一致
         <property name="hashAlgorithmName" value="md5"></property>
         <property name="hashIterations" value="2"></property>
         <property name="storedCredentialsHexEncoded" value="true"></property>
-    </bean>
+    </bean>-->
 
     <!-- Shiro默认会使用Servlet容器的Session,可通过sessionMode属性来指定使用Shiro原生Session -->
     <!-- 即<property name="sessionMode" value="native"/>,详细说明见官方文档 -->
     <!-- 这里主要是设置自定义的单Realm应用,若有多个Realm,可使用'realms'属性代替 -->
 
-    <!-- 会话DAO -->
-    <bean id="sessionDAO" class="com.lenxeon.ucenter.session.shiro.local.RedisSessionDAO">
+    <!-- 会话DAO-->
+    <bean id="sessionDAO" class="org.ys.core.session.dao.RedisSessionDAO">
         <property name="sessionIdGenerator" ref="sessionIdGenerator"/>
         <property name="expire" value="1800000"/>
-    </bean>
+    </bean> 
 
     <!--<!– 会话验证调度器 –>-->
     <!--<bean id="sessionValidationScheduler"-->
@@ -43,7 +43,7 @@
     <!--</bean>-->
 
     <!-- 会话ID生成器 -->
-    <bean id="sessionFactory" class="com.lenxeon.ucenter.session.shiro.local.UserSessionFactory"/>
+    <bean id="sessionFactory" class="org.apache.shiro.session.mgt.SimpleSessionFactory "/>
 
     <!-- 会话管理器 -->
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
@@ -57,18 +57,12 @@
         <property name="sessionIdCookie.path" value="/"/>
     </bean>
 
-    <dubbo:reference id="userService" interface="com.lenxeon.ucenter.user.api.UserService" version="1.0.0"/>
-
     <!-- 继承自AuthorizingRealm的自定义Realm,即指定Shiro验证用户登录的类为自定义的ShiroDbRealm.java -->
-    <bean id="myRealm" class="com.lenxeon.ucenter.session.shiro.local.UserRealm">
-        <property name="userService" ref="userService"></property>
-        <property name="credentialsMatcher" ref="limitRetryHashedMatcher"></property>
-    </bean>
+    <bean id="myRealm" class="org.ys.core.session.realm.UserRealm"></bean>
 
 	<!-- 
     <bean id="cacheManger" class="com.lenxeon.ucenter.session.shiro.local.RedisCacheManager"/>
  	-->
-    <!--<bean id="securityManager" class="com.lenxeon.ucenter.user.shiro.MyDefaultSecurityManager">-->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realms">
             <list>

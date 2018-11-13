@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.ys.common.domain.Tree;
 import org.ys.common.page.PageBean;
-import org.ys.common.utils.BuildTree;
+import org.ys.common.utils.BuildTreeUtil;
 import org.ys.core.dao.CoreMenuMapper;
 import org.ys.core.model.CoreMenu;
 import org.ys.core.model.CoreMenuExample;
@@ -141,7 +141,7 @@ public class CoreMenuServiceImpl implements CoreMenuService{
 			trees.add(tree);
 		}
 		// 默认顶级菜单为０，根据数据库实际情况调整
-		List<Tree<CoreMenu>> list = BuildTree.buildList(trees, "0");
+		List<Tree<CoreMenu>> list = BuildTreeUtil.buildList(trees, "0");
 		return list;
 	}
 
@@ -159,7 +159,7 @@ public class CoreMenuServiceImpl implements CoreMenuService{
 			trees.add(tree);
 		}
 		// 默认顶级菜单为０，根据数据库实际情况调整
-		Tree<CoreMenu> tree = BuildTree.build(trees);
+		Tree<CoreMenu> tree = BuildTreeUtil.build(trees);
 		return tree;
 	}
 
@@ -199,8 +199,16 @@ public class CoreMenuServiceImpl implements CoreMenuService{
 			trees.add(tree);
 		}
 		// 默认顶级菜单为０，根据数据库实际情况调整
-		Tree<CoreMenu> tree = BuildTree.build(trees);
+		Tree<CoreMenu> tree = BuildTreeUtil.build(trees);
 		return tree;
+	}
+
+	@Override
+	public List<CoreMenu> listCoreMenusByUserId(Long coreUserId) {
+		if(null == coreUserId) {
+			return null;
+		}
+		return coreMenuMapper.listCoreMenusByUserId(coreUserId);
 	}
 
 }

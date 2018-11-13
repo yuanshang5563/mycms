@@ -269,4 +269,10 @@
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
     where core_role_id = #{coreRoleId,jdbcType=BIGINT}
   </update>
+  
+  <select id="listCoreRolesByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+ 	select DISTINCT r.* from core_role r inner join core_user_role ur on r.core_role_id=ur.core_role_id
+	inner join core_user u on ur.core_user_id
+	where ur.core_user_id=#{coreUserId} 
+  </select>
 </mapper>

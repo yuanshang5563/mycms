@@ -93,4 +93,6 @@ public interface CoreRoleMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(CoreRole record);
+    
+    List<CoreRole> listCoreRolesByUserId(Long coreUserId);
 }

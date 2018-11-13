@@ -40,37 +40,12 @@
         <property name="successUrl" value="/welcome/index"/>
         <property name="filterChainDefinitions">
             <value>
-                *.js = anon
-                *.css=anon
-                /modules/**=anon
-                /static/**=anon
+                /commons/**=anon
+                /LoginController/**=anon
                 /weixin/**=anon
-                /users/forget.html=anon
-                /users/reset.html=anon
-                /users/login.html=anon
-                /users/**=anon
-                /oauth2/**==anon
-                /test/**==anon
-                <!--/api/**=anon-->
-                /api/v1/users/random=anon
-                /api/v1/users/sign_in=anon
-                /api/v1/users/login=anon
-                /api/v1/users/session=anon
-                /api/v1/users/mobile/check=anon
-                /api/v1/users/password/forgot=anon
-                /api/v1/users/password/reset=anon
-                /api/v1/users/email/check=anon
-                /api/v1/security/captcha/**=anon
-                /api/ids**=anon
-                /api/ids/**=anon
+                /jsp/login.jsp=anon
+                /jsp/exception.jsp=anon
                 /**=authc
-
-                <!--/admin/**=authc-->
-                <!--/apps-web/admin/**=authc-->
-                <!--/mydemo/getVerifyCodeImage=anon-->
-                <!--/main**=authc-->
-                <!--/user/info**=authc-->
-                <!--/admin/listUser**=authc,perms[admin:manage]-->
             </value>
         </property>
     </bean>

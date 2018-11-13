@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 
 public class RequsetUtils {
+	private RequsetUtils() {}
 	
 	/**
 	 * 获取request中的参数并组装成map返回
