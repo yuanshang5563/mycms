@@ -1,5 +1,11 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@include file="/commons/header.jsp"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%
+String extPath = request.getContextPath();
+String extBasePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+extPath;
+%>
+<c:set var="root" value="<%=extBasePath%>"/>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -35,7 +41,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#login").on('click',function(){$("#signupForm").submit();});
+        $("#login").on('click',function(){$("#loginForm").submit();});
         validateRule();
     });
 
@@ -48,8 +54,8 @@
     function login() {
         $.ajax({
             type: "POST",
-            url: ctx+"login",
-            data: $('#signupForm').serialize(),
+            url: "${root}/LoginController/login",
+            data: $('#loginForm').serialize(),
             success: function (r) {
                  if (r.code == 0) {
                     var index = layer.load(1, {
@@ -65,7 +71,7 @@
 
     function validateRule() {
         var icon = "<i class='fa fa-times-circle'></i> ";
-        $("#signupForm").validate({
+        $("#loginForm").validate({
             rules: {
                 username: {
                     required: true
@@ -102,11 +108,11 @@
             </div>
         </div>
         <div class="col-sm-5">
-            <form id="signupForm">
+            <form id="loginForm">
                 <h3 class="text-center">用户登录</h3>
                 <p class="m-t-md text-center">欢迎登录mycms后台管理系统</p>
-                <input type="text" name="username" class="form-control uname" value="admin"/>
-                <input type="password" name="password" class="form-control pword m-b" value="111111"/>
+                <input type="text" name="username" class="form-control uname"/>
+                <input type="password" name="password" class="form-control pword m-b"/>
                 <a id="login" class="btn btn-login btn-block">登录</a>
             </form>
         </div>
