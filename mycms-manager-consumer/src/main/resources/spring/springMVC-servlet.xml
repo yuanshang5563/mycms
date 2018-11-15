@@ -43,5 +43,4 @@
     <mvc:resources mapping="/js/**" location="/js/" cache-period="31556926"/>  
     <mvc:resources mapping="/css/**" location="/css/" cache-period="31556926"/>-->   
     
-    <import resource="dubbo-consumer.xml"/>   
  </beans>

@@ -83,4 +83,12 @@ public class RedisSessionDAO extends AbstractSessionDAO{
 		}
 		return readSession;
 	}
+
+	public int getExpire() {
+		return expire;
+	}
+
+	public void setExpire(int expire) {
+		this.expire = expire;
+	}
 }

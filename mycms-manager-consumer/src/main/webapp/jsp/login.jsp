@@ -61,7 +61,7 @@ String extBasePath = request.getScheme()+"://"+request.getServerName()+":"+reque
                     var index = layer.load(1, {
                         shade: [0.1,'#fff'] //0.1透明度的白色背景
                     });
-                    parent.location.href = '/index';
+                    parent.location.href = '${root}/manager/core/CoreManagerController/main';
                 } else {
                     layer.msg(r.msg);
                 }
@@ -117,7 +117,6 @@ String extBasePath = request.getScheme()+"://"+request.getServerName()+":"+reque
             </form>
         </div>
     </div>
-	<%@include file="/commons/footer.jsp"%>
 </div>
 </body>
 </html>

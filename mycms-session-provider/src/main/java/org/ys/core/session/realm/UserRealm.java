@@ -75,22 +75,23 @@ public class UserRealm extends AuthorizingRealm implements Serializable{
 			throw new CredentialsException("密码为空!");
 		}
 		CoreUser coreUser = null;
+		CoreUserExample example = new CoreUserExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andUserNameEqualTo(userName.trim());
+		criteria.andPasswordEqualTo(password.trim());
+		List<CoreUser> coreUserList = null;
 		try {
-			CoreUserExample example = new CoreUserExample();
-			Criteria criteria = example.createCriteria();
-			criteria.andUserNameEqualTo(userName.trim());
-			criteria.andPasswordEqualTo(password.trim());
-			List<CoreUser> coreUserList = coreUserService.queryCoreUsersByExample(example);
-			if(null == coreUserList || coreUserList.size() <= 0) {
-				throw new AccountException("用户名或密码错误!");
-			}
-			coreUser = coreUserList.get(0);
-			String status = coreUser.getStatus();
-			if(StringUtils.isEmpty(status) || !StringUtils.equals(status, "1")) {
-				throw new AccountException("用户被冻结，请联系管理员!");
-			}
+			coreUserList = coreUserService.queryCoreUsersByExample(example);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		if(null == coreUserList || coreUserList.size() <= 0) {
+			throw new AccountException("用户名或密码错误!");
+		}
+		coreUser = coreUserList.get(0);
+		String status = coreUser.getStatus();
+		if(StringUtils.isEmpty(status) || !StringUtils.equals(status, "1")) {
+			throw new AccountException("用户被冻结，请联系管理员!");
 		}
 		AuthenticationInfo AuthenticationInfo = new SimpleAuthenticationInfo(coreUser.getUserName(),coreUser.getPassword(),getName());
 		return AuthenticationInfo;	

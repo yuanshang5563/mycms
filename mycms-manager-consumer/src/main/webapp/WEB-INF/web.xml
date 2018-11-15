@@ -18,7 +18,7 @@
 	
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:spring/springMVC-servlet.xml,classpath:spring/spring-manager-shiro.xml</param-value>
+		<param-value>classpath:spring/spring-manager-consumer.xml</param-value>
 	</context-param>
 	
 	<filter>    

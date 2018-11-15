@@ -32,7 +32,7 @@ public class LoginController {
 			msg = "登陆成功！ ";
 			success = true;
 		} catch (AuthenticationException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			msg = "用户名或密码错误";
 		}
 		
