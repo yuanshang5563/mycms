@@ -56,14 +56,14 @@ String extBasePath = request.getScheme()+"://"+request.getServerName()+":"+reque
             type: "POST",
             url: "${root}/LoginController/login",
             data: $('#loginForm').serialize(),
-            success: function (r) {
-                 if (r.code == 0) {
+            success: function (res) {
+                 if (res.success == 1) {
                     var index = layer.load(1, {
                         shade: [0.1,'#fff'] //0.1透明度的白色背景
                     });
                     parent.location.href = '${root}/manager/core/CoreManagerController/main';
                 } else {
-                    layer.msg(r.msg);
+                    layer.msg(res.msg);
                 }
             },
         });

@@ -13,64 +13,88 @@
         http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.1.xsd  
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd"> 
 
+	<!--  
     <aop:config proxy-target-class="true"/>
+    -->
 
-    <!-- 会话ID生成器 -->
-    <bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/>
+    <!-- Session ID 生成器 -->
+    <bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"></bean>    
 
     <!-- 会话DAO-->
     <bean id="sessionDAO" class="org.ys.core.session.dao.RedisSessionDAO">
-        <property name="sessionIdGenerator" ref="sessionIdGenerator"/>
-        <property name="expire" value="1800000"/>
+        <property name="sessionIdGenerator" ref="sessionIdGenerator"></property>
     </bean> 
 
     <!-- 会话管理器 -->
+    <!--  
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
-        <property name="globalSessionTimeout" value="1800000"/>
-        <property name="deleteInvalidSessions" value="true"/>
-        <property name="sessionDAO" ref="sessionDAO"/>
-        <property name="sessionIdCookieEnabled" value="true"/>  
-        <property name="sessionIdCookie" ref="sessionIdCookie"/>
+    -->
+    <bean id="sessionManager" class="org.ys.core.shiro.MyWebSessionManager">
+        <property name="globalSessionTimeout" value="1800000"></property>
+        <property name="deleteInvalidSessions" value="true"></property>
+        <!--  -->
+        <property name="sessionDAO" ref="sessionDAO"></property>
+        <property name="sessionIdCookieEnabled" value="true"/>
+        <property name="sessionIdCookie" ref="sharesession"></property>
+        
         <!-- 定时检查失效的session -->
-		<property name="sessionValidationSchedulerEnabled" value="true" />
+		<property name="sessionValidationSchedulerEnabled" value="true"></property>
     </bean>
     
     <!-- 指定本系统SESSIONID, 默认为: JSESSIONID 问题: 与SERVLET容器名冲突, 如JETTY, TOMCAT 等默认JSESSIONID,
         当跳出SHIRO SERVLET时如ERROR-PAGE容器会为JSESSIONID重新分配值导致登录会话丢失! -->
-    <bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
-        <constructor-arg name="name" value="SHAREJSESSIONID"/>
-        <property name="path" value="/" />
+    <bean id="sharesession" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <constructor-arg name="name" value="SHAREJSESSIONID"></constructor-arg>
+        <property name="path" value="/"></property>
     </bean>    
     
     <!-- 继承自AuthorizingRealm的自定义Realm,即指定Shiro验证用户登录的类为自定义的ShiroDbRealm.java -->
     <bean id="myRealm" class="org.ys.core.session.realm.UserRealm"></bean>
-
-	<!-- 
-    <bean id="cacheManger" class="com.lenxeon.ucenter.session.shiro.local.RedisCacheManager"/>
- 	-->
-    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+    
+    <bean id="authenticator" class="org.apache.shiro.authc.pam.ModularRealmAuthenticator">
         <property name="realms">
             <list>
-                <ref bean="myRealm"/>
+            	<ref bean="myRealm"></ref>
             </list>
         </property>
-        <!-- 
-        <property name="cacheManager" ref="cacheManger"/>
-        -->
-        <property name="sessionManager" ref="sessionManager"/>
     </bean>
+    
+    <bean id="authorizer" class="org.apache.shiro.authz.ModularRealmAuthorizer">
+        <property name="realms">
+            <list>
+            	<ref bean="myRealm"></ref>
+            </list>
+        </property>
+    </bean>
+    
+    <!--  -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="authenticator" ref="authenticator"></property>
+        <property name="authorizer" ref="authorizer"></property>
+        <!--  
+        <property name="cacheManager" ref="cacheManager"></property>
+        -->
+        <property name="sessionManager" ref="sessionManager"></property>
+    </bean>
+    
+    <bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager" />
+    
+    <!-- 保证实现了Shiro内部lifecycle函数的bean执行-->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"></bean>
+ 	
 
-    <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
-    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
-
+    <!-- AOP式方法级权限检查  -->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
+        <property name="proxyTargetClass" value="true" />
+    </bean>
 
     <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
         <property name="securityManager" ref="securityManager"/>
     </bean>
 
-    <!-- 相当于调用SecurityUtils.setSecurityManager(securityManager) -->
+    <!-- 相当于调用SecurityUtils.setSecurityManager(securityManager)-->
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="staticMethod" value="org.apache.shiro.SecurityUtils.setSecurityManager"/>
-        <property name="arguments" ref="securityManager"/>
-    </bean>
+        <property name="staticMethod" value="org.apache.shiro.SecurityUtils.setSecurityManager"></property>
+        <property name="arguments" ref="securityManager"></property>
+    </bean> 
 </beans>

@@ -3,23 +3,24 @@ package org.ys.core.session.dao;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
+import org.apache.shiro.session.mgt.SimpleSession;
 import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ys.common.constant.ShiroConstant;
 import org.ys.redis.service.RedisCacheStorageService;
 
 public class RedisSessionDAO extends AbstractSessionDAO{
-
-	private static Logger logger = LoggerFactory.getLogger(RedisSessionDAO.class);
 	@Autowired
 	private RedisCacheStorageService<String,Object> redisCacheStorageService;
-	
-	private int expire;
 	
 	/**
 	 * The Redis key prefix for the sessions
@@ -32,63 +33,68 @@ public class RedisSessionDAO extends AbstractSessionDAO{
 
 	@Override
 	public void update(Session session) throws UnknownSessionException {
-		logger.debug("更新seesion,id=[{}]", session.getId().toString());
 		try {
-			redisCacheStorageService.set(getKey(session.getId().toString()), session, expire);
+			redisCacheStorageService.set(getKey(session.getId().toString()), session, ShiroConstant.SHIRO_SESSION_TIME);
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			e.printStackTrace();
 		}
 	}
 
 	@Override
 	public void delete(Session session) {
-		logger.debug("删除seesion,id=[{}]", session.getId().toString());
 		try {
 			String key = getKey(session.getId().toString());
 			redisCacheStorageService.remove(key);
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			e.printStackTrace();
 		}
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Collection<Session> getActiveSessions() {
-		logger.info("获取存活的session");
-		return Collections.emptySet();
+		Set keySet = redisCacheStorageService.keys(getKey("*"));
+        Set<Session> sessionSet = new HashSet<>();
+        if (CollectionUtils.isEmpty(keySet)) {
+            return Collections.emptySet();
+        }
+        for (Object key : keySet) {
+            sessionSet.add((Session) redisCacheStorageService.get(key.toString()));
+        }
+		return sessionSet;
 	}
 
 	@Override
 	protected Serializable doCreate(Session session) {
-		Serializable sessionId = generateSessionId(session);
-		assignSessionId(session, sessionId);
-		logger.debug("创建seesion,id=[{}]", session.getId().toString());
+        Serializable sessionId = this.generateSessionId(session);
+        this.assignSessionId(session, sessionId);
 		try {
-			redisCacheStorageService.set(getKey(session.getId().toString()), session, expire);
+//			Subject subject = SecurityUtils.getSubject();
+//			if(null != subject) {
+//				String userName = (String) subject.getPrincipal();
+//				session.setAttribute("userName", userName);
+//			}
+			redisCacheStorageService.set(getKey(session.getId().toString()), session, ShiroConstant.SHIRO_SESSION_TIME);
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			e.printStackTrace();
 		}
+		System.out.println("-------------2----------- " + session);
 		return sessionId;
 	}
 
 	@Override
 	protected Session doReadSession(Serializable sessionId) {
-
-		logger.debug("获取seesion,id=[{}]", sessionId.toString());
-		Session readSession = null;
+		SimpleSession readSession = null;
 		try {
-			readSession = (Session) redisCacheStorageService.get(getKey(sessionId.toString()));
+			readSession = (SimpleSession) redisCacheStorageService.get(getKey(sessionId.toString()));
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			e.printStackTrace();
 		}
+		if(null != readSession && null == readSession.getId()) {
+			readSession.setId(sessionId);
+		}
+		System.out.println("------------------------ " + readSession);
 		return readSession;
-	}
-
-	public int getExpire() {
-		return expire;
-	}
-
-	public void setExpire(int expire) {
-		this.expire = expire;
 	}
 }

@@ -6,16 +6,21 @@ import java.util.Map;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.ys.common.constant.ShiroConstant;
 import org.ys.core.service.CoreUserService;
+import org.ys.redis.service.RedisCacheStorageService;
 
 @Controller
 @RequestMapping("/LoginController")
 public class LoginController {
+	@Autowired
+	private RedisCacheStorageService<String, Object> redisCacheStorageService;
 	
 	@Autowired
 	private CoreUserService coreUserService;
@@ -29,6 +34,18 @@ public class LoginController {
 			Subject subject = SecurityUtils.getSubject();
 			UsernamePasswordToken token = new UsernamePasswordToken(username,password);
 			subject.login(token);
+			//subject.hasRole("super_admin");
+			
+			Session localSession = subject.getSession();
+			if(null != localSession) {
+				String sessionKey = ShiroConstant.SHIRO_PRE_KEY+localSession.getId().toString();
+				Session session = (Session) redisCacheStorageService.get(sessionKey);
+				if(null != session) {
+					session.setAttribute("username", username);
+					redisCacheStorageService.remove(sessionKey);;
+					redisCacheStorageService.set(sessionKey, session, ShiroConstant.SHIRO_SESSION_TIME);
+				}
+			}
 			msg = "登陆成功！ ";
 			success = true;
 		} catch (AuthenticationException e) {

@@ -40,22 +40,47 @@ public class UserRealm extends AuthorizingRealm implements Serializable{
 	
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-		CoreUser coreUser = (CoreUser) principals.getPrimaryPrincipal();
-		List<String> roles = new ArrayList<String>();
-		List<String> permissions = new ArrayList<String>();
-		//如果用户不为空，从数据库中获取相关权限和角色
-		if(null != coreUser) {
-			List<CoreRole> coreRoles = coreRoleService.listCoreRolesByUserId(coreUser.getCoreUserId());
-			if(null != coreRoles && coreRoles.size() > 0) {
-				for (CoreRole coreRole : coreRoles) {
-					roles.add(coreRole.getRole());
+		String userName = (String) principals.getPrimaryPrincipal();
+		CoreUser coreUser = null;
+		try {
+			if(StringUtils.isNotEmpty(userName)) {
+				CoreUserExample example = new CoreUserExample();
+				example.createCriteria().andUserNameEqualTo(userName);
+				List<CoreUser> coreUsers = coreUserService.queryCoreUsersByExample(example);
+				if(null != coreUsers && coreUsers.size() > 0) {
+					coreUser = coreUsers.get(0);
 				}
 			}
-			List<CoreMenu> coreMenus = coreMenuService.listCoreMenusByUserId(coreUser.getCoreUserId());
-			if(null != coreMenus && coreMenus.size() > 0) {
-				for (CoreMenu coreMenu : coreMenus) {
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		List<String> roles = null;
+		List<String> permissions = null;
+		if(null == coreUser) {
+			return null;
+		}
+		//如果用户不为空，从数据库中获取相关权限和角色
+		boolean superFlag = false;
+		List<CoreRole> coreRoles = coreRoleService.listCoreRolesByUserId(coreUser.getCoreUserId());
+		if(null != coreRoles && coreRoles.size() > 0) {
+			roles = new ArrayList<String>();
+			for (CoreRole coreRole : coreRoles) {
+				roles.add(coreRole.getRole());
+				if(StringUtils.equals("super_admin", coreRole.getRole())) {
+					superFlag = true;
+				}
+			}
+		}
+		List<CoreMenu> coreMenus = coreMenuService.listCoreMenusByUserId(coreUser.getCoreUserId());
+		if(null != coreMenus && coreMenus.size() > 0) {
+			permissions = new ArrayList<String>();
+			for (CoreMenu coreMenu : coreMenus) {
+				if(StringUtils.isNotEmpty(coreMenu.getPermission())) {
 					permissions.add(coreMenu.getPermission());
 				}
+			}
+			if(superFlag) {
+				permissions.add("*:*");
 			}
 		}
 		SimpleAuthorizationInfo auth = new SimpleAuthorizationInfo();

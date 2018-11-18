@@ -1,6 +1,8 @@
 package org.ys.redis.service;
 
+import java.io.Serializable;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 缓存存储接口
@@ -11,65 +13,82 @@ import java.util.Map;
  * @param <V> value
  */
 public interface RedisCacheStorageService<K, V> {
-	/**
-	 * 在redis数据库中插入 key 和value
-	 *
-	 * @param key
-	 * @param value
-	 * @return
-	 */
-	boolean set(K key, V value);
+	
+    /** 
+     * 批量删除对应的value 
+     *  
+     * @param keys 
+     */  
+    public void remove(final String... keys);
 
-	/**
-	 * 在redis数据库中插入 key 和value 并且设置过期时间
-	 *
-	 * @param key
-	 * @param value
-	 * @param exp   过期时间 s
-	 * @return
-	 */
-	boolean set(K key, V value, int exp);
+    /** 
+     * 批量删除key 
+     *  
+     * @param pattern 
+     */  
+    public void removePattern(final String pattern);  
 
-	/**
-	 * 根据key 去redis 中获取value
-	 *
-	 * @param key
-	 * @return
-	 */
-	V get(K key);
+    /** 
+     * 删除对应的value 
+     * @param key 
+     */  
+    public void remove(final String key);
 
-	/**
-	 * 删除redis库中的数据
-	 *
-	 * @param key
-	 * @return
-	 */
-	boolean remove(K key);
+    /** 
+     * 缓存是否存在
+     * @param key 
+     * @return 
+     */  
+    public boolean exists(final String key); 
 
-	/**
-	 * 设置哈希类型数据到redis 数据库
-	 *
-	 * @param cacheKey 可以看做一张表
-	 * @param key      表字段
-	 * @param value
-	 * @return
-	 */
-	boolean hset(String cacheKey, K key, V value);
+    /** 
+     * 读取缓存 
+     * @param key 
+     * @return 
+     */  
+    public Object get(final String key);  
 
-	/**
-	 * 获取哈希表数据类型的值
-	 *
-	 * @param cacheKey
-	 * @param key
-	 * @return
-	 */
-	V hget(String cacheKey, K key);
+    /** 
+     *  
+     * @Author Ron
+     * @param key 
+     * @param hashKey 
+     * @return 
+     */  
+    public Object get(final String key, final String hashKey); 
 
-	/**
-	 * 获取哈希类型的数据
-	 *
-	 * @param cacheKey
-	 * @return
-	 */
-	Map<K, V> hget(String cacheKey);
+    /** 
+     * 写入缓存 
+     *  
+     * @param key 
+     * @param value 
+     * @return 
+     */  
+    public boolean set(final String key, Object value);  
+
+    /** 
+     *  
+     * @Author Ron 
+     * @param key 
+     * @param hashKey 
+     * @param value 
+     * @return 
+     */  
+    public boolean set(final String key, final String hashKey, Object value); 
+
+    /** 
+     * 写入缓存 
+     *  
+     * @param key 
+     * @param value 
+     * @return 
+     */  
+    public boolean set(final String key, Object value, Long expireTime) ;
+    
+    /**
+     * 根据pattern查找集合
+     * @param pattern
+     * @return
+     */
+    public Set<Serializable> keys(String pattern);
 }

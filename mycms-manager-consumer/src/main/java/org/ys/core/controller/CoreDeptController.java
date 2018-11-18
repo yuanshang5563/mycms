@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,7 @@ public class CoreDeptController {
 	@Autowired
 	private CoreDeptService coreDeptService;
 	
+	@RequiresPermissions({"core:coreDept:list"})
 	@RequestMapping("/coreDeptList")
 	public ModelAndView coreDeptList() throws Exception {
 		ModelAndView model = new ModelAndView("/manager/core_dept/core_dept_list");
