@@ -19,7 +19,7 @@ public class TestRedisCacheStorageService {
 	private CoreUserService coreUserService;
       
     @Autowired  
-    private RedisCacheStorageService<String,CoreUser> redisCacheStorageService;  
+    private RedisCacheStorageService redisCacheStorageService;  
       
     @Test
     public void redisSet(){  
@@ -44,7 +44,7 @@ public class TestRedisCacheStorageService {
     public void redisGetSession(){
     	//String testVal = redisCacheStorageService.get("test");
     	//System.out.println(testVal);
-    	Session session = (Session) redisCacheStorageService.get("shiro_redis_session:eb09d37f-bea1-4246-add9-a17276303d09");
+    	Session session = (Session) redisCacheStorageService.get("redis-shiro-activeSessionCache:5320bf48-55b3-428f-8a51-383314181ebb");
     	if(null != session) {
     		String username = (String) session.getAttribute("username");
     		System.out.println(username);

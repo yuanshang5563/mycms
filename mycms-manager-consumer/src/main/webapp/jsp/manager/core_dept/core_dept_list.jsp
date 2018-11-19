@@ -1,8 +1,9 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@include file="/commons/header.jsp"%>
+
 <!DOCTYPE html>
 <html>
   <head>
+  	<%@include file="/commons/header.jsp"%>
     <title>deptList</title>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">

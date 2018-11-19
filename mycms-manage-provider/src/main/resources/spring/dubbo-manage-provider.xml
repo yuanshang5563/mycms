@@ -15,5 +15,6 @@
     <dubbo:service interface="org.ys.core.service.CoreRoleService" ref="coreRoleService" />  
     <dubbo:service interface="org.ys.core.service.CoreUserRoleService" ref="coreUserRoleService" />
     <dubbo:service interface="org.ys.core.service.CoreDeptService" ref="coreDeptService" />
-    <dubbo:service interface="org.ys.redis.service.RedisCacheStorageService" ref="redisCacheStorageService" />        
+    <dubbo:service interface="org.ys.redis.service.RedisCacheStorageService" ref="redisCacheStorageService" />   
+    <dubbo:service interface="org.crazycake.shiro.IRedisManager" ref="redisManager" />     
 </beans>  

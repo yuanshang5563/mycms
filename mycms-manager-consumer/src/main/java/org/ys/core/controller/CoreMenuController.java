@@ -11,13 +11,16 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.ys.common.constant.CoreMenuType;
 import org.ys.common.domain.Tree;
 import org.ys.common.page.PageBean;
+import org.ys.common.shiro.PermissionName;
 import org.ys.common.utils.DateTimeConverter;
 import org.ys.common.utils.RequsetUtils;
 import org.ys.core.model.CoreDept;
@@ -33,12 +36,16 @@ public class CoreMenuController {
 	@Autowired
 	private CoreMenuService coreMenuService;
 	
+	@RequiresPermissions({"core:coreMenu:list"})
+	@PermissionName(value="列表",type=CoreMenuType.MENU_TYPE_BUTTON)
 	@RequestMapping("/coreMenuList")
 	public ModelAndView coreMenuList() throws Exception {
 		ModelAndView model = new ModelAndView("/manager/core_menu/core_menu_list");
 		return model;
 	}
 	
+	@RequiresPermissions({"core:coreMenu:addAndEdit"})
+	@PermissionName(value="新增和修改",type=CoreMenuType.MENU_TYPE_BUTTON)
 	@RequestMapping("/coreMenuForm")
 	public ModelAndView coreMenuForm(Long coreMenuId,String actionType) throws Exception {
 		CoreMenu coreMenu = null;
@@ -64,6 +71,7 @@ public class CoreMenuController {
 		return model;
 	}
 	
+	@RequiresPermissions({"core:coreMenu:addAndEdit"})
 	@RequestMapping("/saveCoreMenuForm")
 	@ResponseBody
 	public Map<String,Object> saveCoreMenuForm(HttpServletRequest request)throws Exception {
@@ -98,6 +106,8 @@ public class CoreMenuController {
 		return map;
 	}  
 	
+	@RequiresPermissions({"core:coreMenu:del"})
+	@PermissionName(value="删除",type=CoreMenuType.MENU_TYPE_BUTTON)
 	@RequestMapping("/deleteCoreMenu")
 	@ResponseBody
 	public Map<String,Object> deleteCoreMenu(Long coreMenuId)throws Exception {
@@ -143,6 +153,7 @@ public class CoreMenuController {
 		return map;
 	} 
 	
+	@RequiresPermissions({"core:coreMenu:list"})
 	@RequestMapping("/coreMenuListJsonData")
 	@ResponseBody
 	public Map<String,Object> coreMenuListJsonData(HttpServletRequest request)throws Exception {
@@ -179,6 +190,7 @@ public class CoreMenuController {
 		return maps;
 	}	
 	
+	@RequiresPermissions({"core:coreMenu:list"})
 	@RequestMapping("/coreMenuListJsonDataNoPage")
 	@ResponseBody
 	public List<CoreMenu> coreMenuListJsonDataNoPage(HttpServletRequest request)throws Exception {

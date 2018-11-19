@@ -1,6 +1,8 @@
 var prefix ="";
+var basePathUrl = "";
 $(document).ready(function () {
-	prefix = $("#basePathUrl").val()+"/manager/core/CoreMenuController";
+	basePathUrl = $("#basePathUrl").val();
+	prefix = basePathUrl+"/manager/core/CoreMenuController";
     load();
 });
 var load = function () {
@@ -125,6 +127,24 @@ function remove(coreMenuId) {
                 if (data.success == 1) {
                     layer.msg(data.msg);
                     reLoad();
+                } else {
+                    layer.msg(data.msg);
+                }
+            }
+        });
+    })
+}
+
+function reloadPermissions() {
+    layer.confirm('确定要加载权限吗？', {
+        btn: ['确定', '取消']
+    }, function () {
+        $.ajax({
+            url: basePathUrl + "/manager/core/CoreManagerController/reLoadPermissions",
+            type: "post",
+            success: function (data) {
+                if (data.success == 1) {
+                    layer.msg(data.msg);
                 } else {
                     layer.msg(data.msg);
                 }

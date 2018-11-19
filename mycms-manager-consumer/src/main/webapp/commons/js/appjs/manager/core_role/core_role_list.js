@@ -34,7 +34,7 @@ function load() {
 		// pageSize, pageNumber, searchText, sortName,
 		// sortOrder.
 		// 返回false将会终止请求
-		height: 510,
+		//height: 510,
 		queryParams : function(params) {
 			return {
 				// 说明：传入后台的参数包括offset开始索引，limit步长，sort排序列，order：desc或者,以及所有列的键值对

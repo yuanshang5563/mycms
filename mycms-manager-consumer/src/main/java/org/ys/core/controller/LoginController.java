@@ -8,11 +8,14 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
+import org.crazycake.shiro.IRedisManager;
+import org.crazycake.shiro.RedisCacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.ys.common.constant.ShiroConstant;
+import org.ys.common.utils.ObjectUtil;
 import org.ys.core.service.CoreUserService;
 import org.ys.redis.service.RedisCacheStorageService;
 
@@ -20,7 +23,10 @@ import org.ys.redis.service.RedisCacheStorageService;
 @RequestMapping("/LoginController")
 public class LoginController {
 	@Autowired
-	private RedisCacheStorageService<String, Object> redisCacheStorageService;
+	private RedisCacheStorageService redisCacheStorageService;
+	
+	@Autowired
+	private RedisCacheManager redisCacheManager;
 	
 	@Autowired
 	private CoreUserService coreUserService;
@@ -36,16 +42,18 @@ public class LoginController {
 			subject.login(token);
 			//subject.hasRole("super_admin");
 			
-			Session localSession = subject.getSession();
-			if(null != localSession) {
-				String sessionKey = ShiroConstant.SHIRO_PRE_KEY+localSession.getId().toString();
-				Session session = (Session) redisCacheStorageService.get(sessionKey);
-				if(null != session) {
-					session.setAttribute("username", username);
-					redisCacheStorageService.remove(sessionKey);;
-					redisCacheStorageService.set(sessionKey, session, ShiroConstant.SHIRO_SESSION_TIME);
-				}
-			}
+//			Session localSession = subject.getSession();
+//			if(null != localSession) {
+//				String sessionKey = ShiroConstant.SHIRO_PRE_KEY+localSession.getId().toString();
+//				IRedisManager redisManager = redisCacheManager.getRedisManager();
+//				byte[] bytes = redisManager.get(sessionKey.getBytes());
+//				Session session = (Session) ObjectUtil.toObject(bytes);
+//				if(null != session) {
+//					session.setAttribute("username", username);
+//					redisManager.del(sessionKey.getBytes());
+//					redisManager.set(sessionKey.getBytes(), ObjectUtil.toByteArray(session), ShiroConstant.SHIRO_SESSION_TIME);
+//				}
+//			}
 			msg = "登陆成功！ ";
 			success = true;
 		} catch (AuthenticationException e) {
@@ -60,22 +68,8 @@ public class LoginController {
 	}
 	
 	@RequestMapping("/logout")
-	@ResponseBody
-	public Map<String,Object> logout(String username,String password){
-		String msg = "";
-		boolean success = false;
-		try {
-			SecurityUtils.getSubject().logout();
-			msg = "注销成功！ ";
-			success = true;
-		} catch (AuthenticationException e) {
-			e.printStackTrace();
-			msg = "注销失败";
-		}
-		
-		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("msg", msg);
-		map.put("success", success);
-		return map;
+	public String logout(){
+		SecurityUtils.getSubject().logout();
+		return "login";
 	}
 }

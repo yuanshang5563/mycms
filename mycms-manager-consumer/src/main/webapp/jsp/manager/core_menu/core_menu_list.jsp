@@ -1,5 +1,4 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@include file="/commons/header.jsp"%>
 <!DOCTYPE html>
 <html>
   <head>
@@ -8,6 +7,7 @@
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
 	<meta charset="utf-8">
+	<%@include file="/commons/header.jsp"%>
 	<script src="${root}/commons/js/appjs/manager/core_menu/core_menu_list.js"></script>
   </head>
 <body class="gray-bg">
@@ -19,6 +19,9 @@
 						<button type="button" class="btn btn-primary" title="在根节点下添加菜单" onclick="add('0','add')">
 							<i class="fa fa-plus" aria-hidden="true"></i>添加
 						</button>
+						<button type="button" class="btn btn-primary" onclick="reloadPermissions()">
+							<i class="fa fa-plus" aria-hidden="true"></i>加载权限
+						</button>						
 					</div>
 					<table id="menuTable" data-mobile-responsive="true">
 					</table>

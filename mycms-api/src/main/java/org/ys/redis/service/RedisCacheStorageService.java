@@ -1,7 +1,5 @@
 package org.ys.redis.service;
 
-import java.io.Serializable;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -9,10 +7,8 @@ import java.util.Set;
  * 
  * @author yclimb
  *
- * @param <K> key
- * @param <V> value
  */
-public interface RedisCacheStorageService<K, V> {
+public interface RedisCacheStorageService {
 	
     /** 
      * 批量删除对应的value 
@@ -46,16 +42,7 @@ public interface RedisCacheStorageService<K, V> {
      * @param key 
      * @return 
      */  
-    public Object get(final String key);  
-
-    /** 
-     *  
-     * @Author Ron
-     * @param key 
-     * @param hashKey 
-     * @return 
-     */  
-    public Object get(final String key, final String hashKey); 
+    public Object get(final String key);
 
     /** 
      * 写入缓存 
@@ -67,28 +54,18 @@ public interface RedisCacheStorageService<K, V> {
     public boolean set(final String key, Object value);  
 
     /** 
-     *  
-     * @Author Ron 
-     * @param key 
-     * @param hashKey 
-     * @param value 
-     * @return 
-     */  
-    public boolean set(final String key, final String hashKey, Object value); 
-
-    /** 
      * 写入缓存 
      *  
      * @param key 
      * @param value 
      * @return 
      */  
-    public boolean set(final String key, Object value, Long expireTime) ;
+    public boolean set(final String key, Object value, int expireTime) ;
     
     /**
      * 根据pattern查找集合
      * @param pattern
      * @return
      */
-    public Set<Serializable> keys(String pattern);
+    public Set<byte[]> keys(String pattern);
 }

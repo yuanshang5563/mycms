@@ -1,15 +1,13 @@
 package org.ys.redis.service.impl;
 
-import java.io.Serializable;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
+import org.crazycake.shiro.RedisManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
+import org.ys.common.constant.RedisConstant;
+import org.ys.common.utils.ObjectUtil;
 import org.ys.redis.service.RedisCacheStorageService;
 
 /**
@@ -19,10 +17,10 @@ import org.ys.redis.service.RedisCacheStorageService;
  * @param <V>
  */
 @Service("redisCacheStorageService")
-public class RedisCacheStorageServiceImpl<V> implements RedisCacheStorageService<String, V> {
+public class RedisCacheStorageServiceImpl implements RedisCacheStorageService {
 	
     @Autowired  
-    private RedisTemplate<Serializable, Object> redisTemplate; 
+    private RedisManager redisManager; 
     
     /** 
      * 批量删除对应的value 
@@ -32,7 +30,7 @@ public class RedisCacheStorageServiceImpl<V> implements RedisCacheStorageService
     @Override
     public void remove(final String... keys) {  
         for (String key : keys) {  
-            remove(key);  
+        	redisManager.del(key.getBytes());
         }  
     }  
 
@@ -44,9 +42,11 @@ public class RedisCacheStorageServiceImpl<V> implements RedisCacheStorageService
     @Override
     public void removePattern(final String pattern) {  
     	if(StringUtils.isNotEmpty(pattern)) {
-            Set<Serializable> keys = redisTemplate.keys(pattern);  
+    		Set<byte[]> keys = redisManager.keys(pattern.getBytes());
             if (null != keys && keys.size() > 0) {
-            	redisTemplate.delete(keys);
+            	for (byte[] key : keys) {
+            		redisManager.del(key);
+				}
             } 
     	}
     }  
@@ -59,7 +59,7 @@ public class RedisCacheStorageServiceImpl<V> implements RedisCacheStorageService
     public void remove(final String key) {  
     	if(StringUtils.isNotEmpty(key)) {
             if (exists(key)) {  
-                redisTemplate.delete(key);  
+            	redisManager.del(key.getBytes());
             }
     	}
     }  
@@ -74,7 +74,12 @@ public class RedisCacheStorageServiceImpl<V> implements RedisCacheStorageService
     	if(StringUtils.isEmpty(key)) {
     		return false;
     	}
-        return redisTemplate.hasKey(key);  
+    	byte[] valueArr = redisManager.get(key.getBytes());
+    	if(null != valueArr && valueArr.length > 0) {
+    		return true;
+    	}else {
+    		return false;  
+    	}
     }  
 
     /** 
@@ -87,26 +92,14 @@ public class RedisCacheStorageServiceImpl<V> implements RedisCacheStorageService
     	if(StringUtils.isEmpty(key)) {
     		return null;
     	}
-        Object result = null;  
-        ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();  
-        result = operations.get(key);  
-        return result;  
-    }  
-
-    /** 
-     *  
-     * @Author Ron
-     * @param key 
-     * @param hashKey 
-     * @return 
-     */  
-    @Override
-    public Object get(final String key, final String hashKey){  
-        Object result = null;  
-        HashOperations<Serializable,Object,Object> operations = redisTemplate.opsForHash();  
-        result = operations.get(key, hashKey);  
-        return result;  
-    }  
+    	
+    	byte[] bytes = redisManager.get(key.getBytes());
+    	if(null != bytes && bytes.length > 0) {
+    		return ObjectUtil.toObject(bytes);
+    	}else {
+    		return null;
+    	}
+    }   
 
     /** 
      * 写入缓存 
@@ -120,36 +113,14 @@ public class RedisCacheStorageServiceImpl<V> implements RedisCacheStorageService
         boolean result = false;  
         try {  
         	if(StringUtils.isNotEmpty(key)) {
-                ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();  
-                operations.set(key, value);  
+                redisManager.set(key.getBytes(), ObjectUtil.toByteArray(value),RedisConstant.REDIS_EXPIRE_TIME);
                 result = true;  
         	}
         } catch (Exception e) {  
             e.printStackTrace();  
         }  
         return result;  
-    }  
-
-    /** 
-     *  
-     * @Author Ron 
-     * @param key 
-     * @param hashKey 
-     * @param value 
-     * @return 
-     */  
-    @Override
-    public boolean set(final String key, final String hashKey, Object value) {  
-        boolean result = false;  
-        try {  
-            HashOperations<Serializable,Object,Object> operations = redisTemplate.opsForHash();  
-            operations.put(key, hashKey, value);  
-            result = true;  
-        } catch (Exception e) {  
-            e.printStackTrace();  
-        }  
-        return result;  
-    }  
+    } 
 
     /** 
      * 写入缓存 
@@ -159,12 +130,10 @@ public class RedisCacheStorageServiceImpl<V> implements RedisCacheStorageService
      * @return 
      */ 
     @Override
-    public boolean set(final String key, Object value, Long expireTime) {  
+    public boolean set(final String key, Object value, int expireTime) {  
         boolean result = false;  
         try {  
-            ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();  
-            operations.set(key, value);  
-            redisTemplate.expire(key, expireTime, TimeUnit.SECONDS);  
+        	 redisManager.set(key.getBytes(), ObjectUtil.toByteArray(value),expireTime);  
             result = true;  
         } catch (Exception e) {  
             e.printStackTrace();  
@@ -173,10 +142,11 @@ public class RedisCacheStorageServiceImpl<V> implements RedisCacheStorageService
     }
     
     @Override
-    public Set<Serializable> keys(String pattern) {
+    public Set<byte[]> keys(String pattern) {
     	if(StringUtils.isEmpty(pattern)) {
     		return null;
     	}
-    	return redisTemplate.keys(pattern);
+    	
+    	return redisManager.keys(pattern.getBytes());
     }
 }

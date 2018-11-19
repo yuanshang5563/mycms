@@ -1,9 +1,10 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@include file="/commons/header.jsp"%>
+
 
 <!DOCTYPE html>
 <html>
   <head>
+  	<%@include file="/commons/header.jsp"%>
     <title>roleForm</title>
     <meta charset="utf-8">
 	<meta http-equiv="pragma" content="no-cache">

@@ -12,12 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.ys.common.constant.CoreMenuType;
 import org.ys.common.page.PageBean;
+import org.ys.common.shiro.PermissionName;
 import org.ys.common.utils.DateTimeConverter;
 import org.ys.common.utils.RequsetUtils;
 import org.ys.core.model.CoreDept;
@@ -42,12 +45,16 @@ public class CoreUserController {
 	@Autowired
 	private CoreDeptService coreDeptService;
 	
+	@RequiresPermissions({"core:coreUser:list"})
+	@PermissionName(value="列表",type=CoreMenuType.MENU_TYPE_BUTTON)
 	@RequestMapping("/coreUserList")
 	public ModelAndView coreUserList() throws Exception {
 		ModelAndView model = new ModelAndView("/manager/core_user/core_user_list");
 		return model;
 	}
 	
+	@RequiresPermissions({"core:coreUser:addAndEdit"})
+	@PermissionName(value="新增和修改",type=CoreMenuType.MENU_TYPE_BUTTON)
 	@RequestMapping("/coreUserForm")
 	public ModelAndView coreUserForm(Long coreUserId,String actionType) throws Exception {
 		CoreUser coreUser = null;
@@ -72,6 +79,7 @@ public class CoreUserController {
 		return model;
 	}
 	
+	@RequiresPermissions({"core:coreUser:addAndEdit"})
 	@RequestMapping("/saveCoreUserForm")
 	@ResponseBody
 	public Map<String,Object> saveCoreUserForm(HttpServletRequest request)throws Exception {
@@ -113,6 +121,8 @@ public class CoreUserController {
 		return map;
 	}  
 	
+	@RequiresPermissions({"core:coreUser:del"})
+	@PermissionName(value="删除",type=CoreMenuType.MENU_TYPE_BUTTON)
 	@RequestMapping("/deleteCoreUser")
 	@ResponseBody
 	public Map<String,Object> deleteCoreUser(Long coreUserId)throws Exception {
@@ -158,6 +168,7 @@ public class CoreUserController {
 		return map;
 	} 
 	
+	@RequiresPermissions({"core:coreUser:list"})
 	@RequestMapping("/coreUserListJsonData")
 	@ResponseBody
 	public Map<String,Object> coreUserListJsonData(HttpServletRequest request)throws Exception {

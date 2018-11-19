@@ -1,5 +1,12 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@include file="/commons/header.jsp"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
+<%
+String extPath = request.getContextPath();
+String extBasePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+extPath;
+%>
+<c:set var="root" value="<%=extBasePath%>"/>
 
 <!DOCTYPE html>
 <html>
@@ -12,19 +19,19 @@
     <meta http-equiv="refresh" content="0;ie.html"/>
     <![endif]-->
     <link rel="shortcut icon" href="${root}/commons/favicon.ico">
-    <link type="text/css" href="${root}/commons/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
-    <link type="text/css" href="${root}/commons/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link type="text/css" href="${root}/commons/css/bootstrap.min.css" rel="stylesheet">
+    <link type="text/css" href="${root}/commons/css/font-awesome.min.css" rel="stylesheet">
     <link type="text/css" href="${root}/commons/css/plugins/toastr/toastr.min.css" rel="stylesheet">
     <link type="text/css" href="${root}/commons/css/animate.css" rel="stylesheet">
-    <link type="text/css" href="${root}/commons/css/style.css?v=4.1.0" rel="stylesheet">
+    <link type="text/css" href="${root}/commons/css/style.css" rel="stylesheet">
 	<!-- 全局js -->
-	<script type="text/javascript" src="${root}/commons/js/jquery.min.js?v=2.1.4"></script>
-	<script type="text/javascript" src="${root}/commons/js/bootstrap.min.js?v=3.3.6"></script>
+	<script type="text/javascript" src="${root}/commons/js/jquery.min.js"></script>
+	<script type="text/javascript" src="${root}/commons/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="${root}/commons/js/plugins/metisMenu/jquery.metisMenu.js"></script>
 	<script type="text/javascript" src="${root}/commons/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 	<script type="text/javascript" src="${root}/commons/js/plugins/layer/layer.min.js"></script>
 	<!-- 自定义js -->
-	<script type="text/javascript" src="${root}/commons/js/app.js?v=4.1.0"></script>
+	<script type="text/javascript" src="${root}/commons/js/app.js"></script>
 	<script type="text/javascript" src="${root}/commons/js/contabs.js"></script>
 	<!-- 第三方插件 -->
 	<script type="text/javascript" src="${root}/commons/js/plugins/pace/pace.min.js"></script>
@@ -53,10 +60,10 @@
         },
         methods: {
             notify: function () {
-                $.getJSON('/oa/notify/message', function (r) {
+/*                 $.getJSON('/oa/notify/message', function (r) {
                     wrapper.total = r.total;
                     wrapper.rows = r.rows;
-                });
+                }); */
             },
             personal: function () {
                 layer.open({
@@ -173,15 +180,15 @@
                 <i class="fa fa-forward"></i>
             </button>
             <div class="btn-group roll-nav roll-right">
-                <button class="dropdown J_tabClose" data-toggle="dropdown"> 关闭操作<span class="caret"></span></button>
-                <ul role="menu" class="dropdown-menu dropdown-menu-right">
+                <button id="dLabel" class="dropdown J_tabClose" data-toggle="dropdown"> 关闭操作<span class="caret"></span></button>
+                <ul role="menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel">
                     <li class="J_tabShowActive"><a>定位当前选项卡</a></li>
                     <li class="divider"></li>
                     <li class="J_tabCloseAll"><a>关闭全部选项卡</a></li>
                     <li class="J_tabCloseOther"><a>关闭其他选项卡</a></li>
                 </ul>
             </div>
-            <a href="/logout" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
+            <a href="${root}/LoginController/logout" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
         </div>
         <div class="row J_mainContent" id="content-main">
             <iframe class="J_iframe" name="iframe0" width="100%" height="100%" 

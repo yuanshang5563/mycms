@@ -11,12 +11,15 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.ys.common.constant.CoreMenuType;
 import org.ys.common.page.PageBean;
+import org.ys.common.shiro.PermissionName;
 import org.ys.common.utils.DateTimeConverter;
 import org.ys.common.utils.RequsetUtils;
 import org.ys.core.model.CoreRole;
@@ -31,12 +34,16 @@ public class CoreRoleController {
 	@Autowired
 	private CoreRoleService coreRoleService;
 	
+	@RequiresPermissions({"core:coreRole:list"})
+	@PermissionName(value="列表",type=CoreMenuType.MENU_TYPE_BUTTON)
 	@RequestMapping("/coreRoleList")
 	public ModelAndView coreRoleList() throws Exception {
 		ModelAndView model = new ModelAndView("/manager/core_role/core_role_list");
 		return model;
 	}
 	
+	@RequiresPermissions({"core:coreRole:addAndEdit"})
+	@PermissionName(value="新增和修改",type=CoreMenuType.MENU_TYPE_BUTTON)
 	@RequestMapping("/coreRoleForm")
 	public ModelAndView coreRoleForm(Long coreRoleId,String actionType) throws Exception {
 		CoreRole coreRole = null;
@@ -52,6 +59,7 @@ public class CoreRoleController {
 		return model;
 	}
 	
+	@RequiresPermissions({"core:coreRole:addAndEdit"})
 	@RequestMapping("/saveCoreRoleForm")
 	@ResponseBody
 	public Map<String,Object> saveCoreRoleForm(HttpServletRequest request)throws Exception {
@@ -81,14 +89,16 @@ public class CoreRoleController {
 			}
 			
 			boolean existFlag = false;
-			String role = coreRole.getRole();
-			if(StringUtils.isNotEmpty(role)) {
-				CoreRoleExample example = new CoreRoleExample();
-				example.createCriteria().andRoleEqualTo(role);
-				List<CoreRole> coreRoleList = coreRoleService.queryCoreRolesByExample(example);
-				if(null != coreRoleList && coreRoleList.size() > 0) {
-					existFlag = true;
-				}
+			if(null == coreRole.getCoreRoleId() || coreRole.getCoreRoleId() == 0) {
+				String role = coreRole.getRole();
+				if(StringUtils.isNotEmpty(role)) {
+					CoreRoleExample example = new CoreRoleExample();
+					example.createCriteria().andRoleEqualTo(role);
+					List<CoreRole> coreRoleList = coreRoleService.queryCoreRolesByExample(example);
+					if(null != coreRoleList && coreRoleList.size() > 0) {
+						existFlag = true;
+					}
+				}				
 			}
 			if(!existFlag) {
 				coreRoleService.saveOrUpdateCoreRoleAndCoreMenu(coreRole, coreMenuIdArr);
@@ -109,6 +119,8 @@ public class CoreRoleController {
 		return map;
 	}  
 	
+	@RequiresPermissions({"core:coreRole:del"})
+	@PermissionName(value="删除",type=CoreMenuType.MENU_TYPE_BUTTON)
 	@RequestMapping("/deleteCoreRole")
 	@ResponseBody
 	public Map<String,Object> deleteCoreRole(Long coreRoleId)throws Exception {
@@ -154,6 +166,7 @@ public class CoreRoleController {
 		return map;
 	} 
 	
+	@RequiresPermissions({"core:coreRole:list"})
 	@RequestMapping("/coreRoleListJsonData")
 	@ResponseBody
 	public Map<String,Object> coreRoleListJsonData(HttpServletRequest request)throws Exception {

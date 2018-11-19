@@ -13,14 +13,15 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.SimpleSession;
 import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
+import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ys.common.constant.ShiroConstant;
 import org.ys.redis.service.RedisCacheStorageService;
 
-public class RedisSessionDAO extends AbstractSessionDAO{
+public class RedisSessionDAO extends EnterpriseCacheSessionDAO{
 	@Autowired
-	private RedisCacheStorageService<String,Object> redisCacheStorageService;
+	private RedisCacheStorageService redisCacheStorageService;
 	
 	/**
 	 * The Redis key prefix for the sessions
@@ -32,23 +33,22 @@ public class RedisSessionDAO extends AbstractSessionDAO{
 	}
 
 	@Override
-	public void update(Session session) throws UnknownSessionException {
+	protected void doUpdate(Session session) {
 		try {
 			redisCacheStorageService.set(getKey(session.getId().toString()), session, ShiroConstant.SHIRO_SESSION_TIME);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-	}
-
+		}		
+	}	
+	
 	@Override
-	public void delete(Session session) {
+	protected void doDelete(Session session) {
 		try {
 			String key = getKey(session.getId().toString());
 			redisCacheStorageService.remove(key);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	@SuppressWarnings("rawtypes")

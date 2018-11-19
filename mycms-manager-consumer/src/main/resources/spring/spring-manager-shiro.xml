@@ -38,9 +38,7 @@
             <value>
                 /commons/**=anon
                 /LoginController/**=anon
-                /manager/core/CoreManagerController/**=anon
                 /jsp/login.jsp=anon
-                /jsp/manager/main.jsp=anon
                 /jsp/exception.jsp=anon
                 /jsp/unauthorize.jsp=anon
             	/jsp/manager**=authc
