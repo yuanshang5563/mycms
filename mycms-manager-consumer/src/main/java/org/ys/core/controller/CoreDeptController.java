@@ -35,7 +35,7 @@ public class CoreDeptController {
 	private CoreDeptService coreDeptService;
 	
 	@RequiresPermissions({"core:coreDept:list"})
-	@PermissionName(value="列表",type=CoreMenuType.MENU_TYPE_BUTTON)
+	@PermissionName(value="列表",type=CoreMenuType.MENU_TYPE_PERMISSION)
 	@RequestMapping("/coreDeptList")
 	public ModelAndView coreDeptList() throws Exception {
 		ModelAndView model = new ModelAndView("/manager/core_dept/core_dept_list");
@@ -43,7 +43,7 @@ public class CoreDeptController {
 	}
 	
 	@RequiresPermissions({"core:coreDept:addAndEdit"})
-	@PermissionName(value="新增和修改",type=CoreMenuType.MENU_TYPE_BUTTON)
+	@PermissionName(value="新增和修改",type=CoreMenuType.MENU_TYPE_PERMISSION)
 	@RequestMapping("/coreDeptForm")
 	public ModelAndView coreDeptForm(Long coreDeptId,String actionType) throws Exception {
 		CoreDept coreDept = null;
@@ -105,7 +105,7 @@ public class CoreDeptController {
 	}  
 	
 	@RequiresPermissions({"core:coreDept:del"})
-	@PermissionName(value="删除",type=CoreMenuType.MENU_TYPE_BUTTON)
+	@PermissionName(value="删除",type=CoreMenuType.MENU_TYPE_PERMISSION)
 	@RequestMapping("/deleteCoreDept")
 	@ResponseBody
 	public Map<String,Object> deleteCoreDept(Long coreDeptId)throws Exception {

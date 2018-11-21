@@ -46,7 +46,7 @@
 								  	<input type="hidden" value="${root}" id="basePathUrl">
 								  	<input type="hidden" value="${coreRole.coreRoleId}" name="coreRoleId" id="coreRoleId">
 								  	<input type="hidden" value="${actionType}" id="actionType">							
-									<button type="button" class="btn btn-primary" onclick="coreRoleFormSave()">提交</button>
+									<button type="button" id="coreRoleBtn" class="btn btn-primary">提交</button>
 								</div>
 							</div>
 						</form>

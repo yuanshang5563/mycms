@@ -174,14 +174,14 @@ function remove(coreUserId) {
 		});
 	})
 }
-function resetPwd(id) {
+function resetPwd(coreUserId) {
 	layer.open({
 		type : 2,
 		title : '重置密码',
 		maxmin : true,
 		shadeClose : false, // 点击遮罩关闭层
-		area : [ '400px', '260px' ],
-		content : prefix + '/resetPwd/' + id // iframe的url
+		area : [ '400px', '360px' ],
+		content : prefix + '/resetPwd?coreUserId=' + coreUserId // iframe的url
 	});
 }
 

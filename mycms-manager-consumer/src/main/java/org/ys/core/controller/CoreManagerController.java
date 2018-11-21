@@ -119,6 +119,16 @@ public class CoreManagerController {
 					}
 				}
 			}
+			//找到所有权限
+			Map<String,CoreMenu> existPermissions = new HashMap<String,CoreMenu>();
+			example.clear();
+			example.createCriteria().andMenuTypeEqualTo(CoreMenuType.MENU_TYPE_PERMISSION);
+			List<CoreMenu> buttonList = coreMenuService.queryCoreMenusByExample(example);
+			if(null != buttonList && buttonList.size() > 0) {
+				for (CoreMenu button : buttonList) {
+					existPermissions.put(button.getMenuUrl(), button);
+				}
+			}
 			
 			for (HandlerMethod handlerMethod : handlerMethods) {
 				RequiresPermissions requiresPermissionsAnno = handlerMethod.getMethodAnnotation(RequiresPermissions.class);
@@ -141,40 +151,41 @@ public class CoreManagerController {
 					String menuUrl = methodAndUrlMap.get(handlerMethod);
 					int position = StringUtils.lastIndexOf(menuUrl, "/");
 					String menuActionUrl = StringUtils.substring(menuUrl, 0, position);
-					//先找list
+					//先找父类
 					CoreMenu parentMenu = null;
-					if(StringUtils.equals(CoreMenuType.MENU_TYPE_BUTTON, permissionNameType)){
+					if(StringUtils.equals(CoreMenuType.MENU_TYPE_PERMISSION, permissionNameType)){
 						if(existParentMenu.containsKey(menuActionUrl)) {
 							parentMenu = existParentMenu.get(menuActionUrl);
 						}
-					}
-					//再找当前菜单或按钮
-					CoreMenu currCoreMenu = null;
-					example.clear();
-					Criteria criteria = example.createCriteria();
-					criteria.andMenuUrlEqualTo(menuUrl);
-					List<CoreMenu> menus = coreMenuService.queryCoreMenusByExample(example);
-					if(null != menus && menus.size() > 0) {
-						currCoreMenu = menus.get(0);
-					}
-					if(StringUtils.equals(CoreMenuType.MENU_TYPE_BUTTON, permissionNameType)){
 						if(null != parentMenu) {
-							if(null == currCoreMenu) {
-								currCoreMenu = new CoreMenu();
-								currCoreMenu.setParentCoreMenuId(parentMenu.getCoreMenuId());
-								currCoreMenu.setMenuUrl(menuUrl);
-							}
-							currCoreMenu.setPermission(permission);
-							currCoreMenu.setMenuType(CoreMenuType.MENU_TYPE_BUTTON);
-							currCoreMenu.setMenuName(permissionNameVal);
-							if(null != currCoreMenu.getCoreMenuId() && currCoreMenu.getCoreMenuId() != 0l) {
-								coreMenuService.updateById(currCoreMenu);
+							CoreMenu buttonMenu = null;
+							if(existPermissions.containsKey(menuUrl)) {
+								buttonMenu = existPermissions.get(menuUrl);
 							}else {
-								coreMenuService.save(currCoreMenu);
+								buttonMenu = new CoreMenu();
+								buttonMenu.setMenuUrl(menuUrl);
+								buttonMenu.setParentCoreMenuId(parentMenu.getCoreMenuId());
 							}
-							
-						}
+							buttonMenu.setPermission(permission);
+							buttonMenu.setMenuType(CoreMenuType.MENU_TYPE_PERMISSION);
+							buttonMenu.setMenuName(permissionNameVal);
+							if(permission.contains("list")) {
+								buttonMenu.setOrderNum(0);
+							}else if(permission.contains("add")) {
+								buttonMenu.setOrderNum(1);
+							}else if(permission.contains("del")) {
+								buttonMenu.setOrderNum(2);
+							}else {
+								buttonMenu.setOrderNum(3);
+							}
+							if(null != buttonMenu.getCoreMenuId() && buttonMenu.getCoreMenuId() != 0l) {
+								coreMenuService.updateById(buttonMenu);
+							}else {
+								coreMenuService.save(buttonMenu);
+							}
+						}						
 					}
+
 				}
 			}
 		} catch (Exception e) {

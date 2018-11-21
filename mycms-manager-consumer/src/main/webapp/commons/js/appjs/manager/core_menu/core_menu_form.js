@@ -3,47 +3,60 @@ var prefix = "";
 $(function() {
 	basePathUrl = $("#basePathUrl").val();
 	prefix = basePathUrl+"/manager/core/CoreMenuController";
+	$("#coreMenuBtn").on('click',function(){$("#coreMenuForm").submit();});
+	validateRule();	
+});
+
+$.validator.setDefaults({
+    submitHandler: function () {
+    	coreMenuFormSave();
+    }
 });
 
 function coreMenuFormSave() {
-	if(validateMenuForm()){
-		$.ajax({
-			cache : true,
-			type : "POST",
-			url : prefix + "/saveCoreMenuForm",
-			data : $('#coreMenuForm').serialize(),
-			async : false,
-			error : function(request) {
-				laryer.alert("连接错误");
-			},
-			success : function(data) {
-				if (data.success == 1) {
-					parent.layer.msg(data.msg);
-					parent.reLoad();
-					var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
-					parent.layer.close(index);
+	$.ajax({
+		cache : true,
+		type : "POST",
+		url : prefix + "/saveCoreMenuForm",
+		data : $('#coreMenuForm').serialize(),
+		async : false,
+		error : function(request) {
+			laryer.alert("连接错误");
+		},
+		success : function(data) {
+			if (data.success == 1) {
+				parent.layer.msg(data.msg);
+				parent.reLoad();
+				var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+				parent.layer.close(index);
 
-				} else {
-					layer.alert(data.msg)
-				}
+			} else {
+				layer.alert(data.msg)
 			}
-		});		
-	}
+		}
+	});	
 }
 
-function validateMenuForm() {
-	var menuName = $("#menuName").val();
-	if(menuName == ''){
-		alert("菜单名称必填！");
-		$("#menuName").focus();
-		return false;
-	}
-	var menuType = $("input[name='menuType']:checked").val(); 
-	if(menuType == '' || undefined == menuType){
-		alert("菜单类型必填！");
-		return false;
-	}
-	return true;
+function validateRule() {
+    var icon = "<i class='fa fa-times-circle'></i> ";
+    $("#coreMenuForm").validate({
+        rules: {
+        	menuName: {
+                required: true
+            },
+            menuType: {
+                required: true
+            }
+        },
+        messages: {
+        	menuName: {
+                required: icon + "请输入菜单名称",
+            },
+            menuType: {
+                required: icon + "菜单类型必选",
+            }
+        }
+    })
 }
 
 function openIco(){

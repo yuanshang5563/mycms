@@ -7,5 +7,5 @@ public class CoreMenuType {
 	
 	public static final String MENU_TYPE_MENU = "1";
 	
-	public static final String MENU_TYPE_BUTTON = "2";
+	public static final String MENU_TYPE_PERMISSION = "2";
 }

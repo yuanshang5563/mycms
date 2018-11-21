@@ -15,6 +15,17 @@
 
 	<import resource="classpath*:/spring/spring-shiro-common.xml"/>
 
+	<!-- 无权访问跳转的页面 -->
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <!-- 错误异常转发jsp页面 -->
+                <prop key="org.apache.shiro.authz.UnauthorizedException">/unauthorize</prop>
+                <prop key="org.apache.shiro.authz.UnauthenticatedException">/unauthorize</prop>
+            </props>
+        </property>
+    </bean>
+
     <!--我应该考虑自己实现一个dobbo的filter-->
     <!-- Shiro主过滤器本身功能十分强大,其强大之处就在于它支持任何基于URL路径表达式的、自定义的过滤器的执行 -->
     <!-- Web应用中,Shiro可控制的Web请求必须经过Shiro主过滤器的拦截,Shiro对基于Spring的Web应用提供了完美的支持 -->
@@ -27,7 +38,7 @@
         <property name="successUrl" value="/manager/core/CoreManagerController/main"/> 
         <!-- 用户访问未对其授权的资源时,所显示的连接 -->
         <!-- 若想更明显的测试此属性可以修改它的值,如unauthor.jsp,然后用[玄玉]登录后访问/admin/listUser.jsp就看见浏览器会显示unauthor.jsp -->
-        <property name="unauthorizedUrl" value="/unauthorize.jsp"/>
+        <property name="unauthorizedUrl" value="/jsp/unauthorize.jsp"/>
         <!-- Shiro连接约束配置,即过滤链的定义 -->
         <!-- 此处可配合我的这篇文章来理解各个过滤连的作用http://blog.csdn.net/jadyer/article/details/12172839 -->
         <!-- 下面value值的第一个'/'代表的路径是相对于HttpServletRequest.getContextPath()的值来的 -->

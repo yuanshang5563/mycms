@@ -58,7 +58,7 @@ public class LoginController {
 			success = true;
 		} catch (AuthenticationException e) {
 			//e.printStackTrace();
-			msg = "用户名或密码错误";
+			msg = e.getMessage();
 		}
 		
 		Map<String,Object> map = new HashMap<String,Object>();

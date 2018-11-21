@@ -24,7 +24,6 @@
 				<div class="ibox float-e-margins">
 					<div class="ibox-content">
 						<form class="form-horizontal m-t" id="coreUserForm">
-							<input id="userId" name="userId" type="hidden">
 							<div class="form-group">
 								<label class="col-sm-3 control-label">姓名：</label>
 								<div class="col-sm-8">
@@ -47,7 +46,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">密码确认：</label>
 								<div class="col-sm-8">
-									<input id="comfirmPassword" class="form-control" type="password">
+									<input id="comfirmPassword" name="comfirmPassword" class="form-control" type="password">
 								</div>
 							</div>	
 							</c:if>	
@@ -112,9 +111,15 @@
 								<div class="col-sm-8">
 									<c:forEach items="${coreRoles}" var="role">
 									<label class="checkbox-inline">
-										<input name="coreRole" type="checkbox" value="${role.coreRoleId}">${role.roleName}</input>
+										<input name="coreRole" type="checkbox" value="${role.coreRoleId}" id="coreRole_${role.coreRoleId}">${role.roleName}</input>
 									</label>
 									</c:forEach>
+									<c:if test="${existCoreRoles != null && fn:length(existCoreRoles) > 0}">
+										<c:forEach items="${existCoreRoles}" var="existCoreRole">
+											<script>$("#coreRole_"+"${existCoreRole.coreRoleId}").prop("checked",true); </script>
+										</c:forEach>
+										
+									</c:if>
 								</div>
 							</div>
 						  	<input type="hidden" value="${root}" id="basePathUrl">
@@ -122,7 +127,7 @@
 						  	<input type="hidden" value="${viewFlag}" id="viewFlag">
 							<div class="form-group">
 								<div class="col-sm-8 col-sm-offset-3">
-									<button type="button" class="btn btn-primary" onclick="coreUserFormSave()">提交</button>
+									<button type="button" id="coreUserBtn" class="btn btn-primary">提交</button>
 								</div>
 							</div>
 						</form>

@@ -17,13 +17,13 @@ String extBasePath = request.getScheme()+"://"+request.getServerName()+":"+reque
     <![endif]-->    
     <title>mycms</title>
 	<link href="${root}/commons/css/bootstrap.min.css" rel="stylesheet">
-	<link href="${root}/commons/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+	<link href="${root}/commons/css/font-awesome.css" rel="stylesheet">
 	<link href="${root}/commons/css/animate.css" rel="stylesheet">
 	<link href="${root}/commons/css/style.css" rel="stylesheet">
 	<link type="text/css" href="${root}/commons/css/login.css" rel="stylesheet">
 	<!-- 全局js -->
-	<script type="text/javascript" src="${root}/commons/js/jquery.min.js?v=2.1.4"></script>
-	<script type="text/javascript" src="${root}/commons/js/bootstrap.min.js?v=3.3.6"></script>
+	<script type="text/javascript" src="${root}/commons/js/jquery.min.js"></script>
+	<script type="text/javascript" src="${root}/commons/js/bootstrap.min.js"></script>
 	
 	<!-- jQuery Validation plugin javascript-->
 	<script type="text/javascript" src="${root}/commons/js/ajax-util.js"></script>
@@ -31,7 +31,7 @@ String extBasePath = request.getScheme()+"://"+request.getServerName()+":"+reque
 	<script type="text/javascript" src="${root}/commons/js/plugins/validate/messages_zh.min.js"></script>
 	<script type="text/javascript" src="${root}/commons/js/plugins/layer/layer.min.js"></script>    
 	<!-- 自定义js -->
-	<script type="text/javascript" src="${root}/commons/js/content.js?v=1.0.0"></script>
+	<script type="text/javascript" src="${root}/commons/js/content.js"></script>
     <script>
         if (window.top !== window.self) {
             window.top.location = window.location;

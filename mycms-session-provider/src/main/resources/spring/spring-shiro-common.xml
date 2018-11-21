@@ -88,19 +88,10 @@
     <!-- 保证实现了Shiro内部lifecycle函数的bean执行-->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"></bean>
  	
-
-    <!-- AOP式方法级权限检查 -->
-    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
-        <property name="proxyTargetClass" value="true" />
-    </bean> 
-
-    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
-        <property name="securityManager" ref="securityManager"/>
-    </bean>
-
     <!-- 相当于调用SecurityUtils.setSecurityManager(securityManager)-->
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
         <property name="staticMethod" value="org.apache.shiro.SecurityUtils.setSecurityManager"></property>
         <property name="arguments" ref="securityManager"></property>
     </bean> 
+    
 </beans>

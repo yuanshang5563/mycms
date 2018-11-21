@@ -77,7 +77,7 @@
 							<input type="hidden" value="${viewFlag}" id="viewFlag">		
 							<div class="form-group">
 								<div class="col-sm-8 col-sm-offset-3">
-									<button type="button" class="btn btn-primary" onclick="coreMenuFormSave()">提交</button>
+									<button id="coreMenuBtn" type="button" class="btn btn-primary">提交</button>
 								</div>
 							</div>
 						</form>

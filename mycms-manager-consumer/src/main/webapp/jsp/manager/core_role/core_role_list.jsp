@@ -17,11 +17,13 @@
 			<div class="ibox">
 				<div class="ibox-body">
 					<div class="fixed-table-toolbar">
+						<shiro:hasPermission name="core:coreRole:addAndEdit">
 						<div class="columns pull-left">
 							<button type="button" class="btn  btn-primary" onclick="add()">
 								<i class="fa fa-plus hidden" aria-hidden="true"></i>添加
 							</button>
 						</div>
+						</shiro:hasPermission>
 						<div class="columns pull-right">
 							<button class="btn btn-success" onclick="reLoad()">查询</button>
 						</div>
@@ -38,24 +40,22 @@
 		<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
 		<div>
 			<script type="text/javascript">
-				//var s_edit_h = 'hidden';
-				//var s_remove_h = 'hidden';
-				var s_edit_h = '';
-				var s_remove_h = '';
+				var s_edit_h = 'hidden';
+				var s_remove_h = 'hidden';
 			</script>
 		</div>
-		<!-- 
-		<div shiro:hasPermission="sys:role:edit">
-			<script type="text/javascript">
-				s_edit_h = '';
-			</script>
-		</div>
-		<div shiro:hasPermission="sys:role:remove">
+		<div>
+			<shiro:hasPermission name="core:coreRole:addAndEdit">
+				<script type="text/javascript">
+					s_edit_h = '';
+				</script>
+			</shiro:hasPermission>
+			<shiro:hasPermission name="core:coreRole:del">
 			<script type="text/javascript">
 				var s_remove_h = '';
 			</script>
+			</shiro:hasPermission>
 		</div>
-		 -->
 	</div>
 </body>
 

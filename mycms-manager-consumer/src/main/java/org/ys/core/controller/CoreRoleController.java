@@ -35,7 +35,7 @@ public class CoreRoleController {
 	private CoreRoleService coreRoleService;
 	
 	@RequiresPermissions({"core:coreRole:list"})
-	@PermissionName(value="列表",type=CoreMenuType.MENU_TYPE_BUTTON)
+	@PermissionName(value="列表",type=CoreMenuType.MENU_TYPE_PERMISSION)
 	@RequestMapping("/coreRoleList")
 	public ModelAndView coreRoleList() throws Exception {
 		ModelAndView model = new ModelAndView("/manager/core_role/core_role_list");
@@ -43,7 +43,7 @@ public class CoreRoleController {
 	}
 	
 	@RequiresPermissions({"core:coreRole:addAndEdit"})
-	@PermissionName(value="新增和修改",type=CoreMenuType.MENU_TYPE_BUTTON)
+	@PermissionName(value="新增和修改",type=CoreMenuType.MENU_TYPE_PERMISSION)
 	@RequestMapping("/coreRoleForm")
 	public ModelAndView coreRoleForm(Long coreRoleId,String actionType) throws Exception {
 		CoreRole coreRole = null;
@@ -120,7 +120,7 @@ public class CoreRoleController {
 	}  
 	
 	@RequiresPermissions({"core:coreRole:del"})
-	@PermissionName(value="删除",type=CoreMenuType.MENU_TYPE_BUTTON)
+	@PermissionName(value="删除",type=CoreMenuType.MENU_TYPE_PERMISSION)
 	@RequestMapping("/deleteCoreRole")
 	@ResponseBody
 	public Map<String,Object> deleteCoreRole(Long coreRoleId)throws Exception {

@@ -37,7 +37,7 @@ public class CoreMenuController {
 	private CoreMenuService coreMenuService;
 	
 	@RequiresPermissions({"core:coreMenu:list"})
-	@PermissionName(value="列表",type=CoreMenuType.MENU_TYPE_BUTTON)
+	@PermissionName(value="列表",type=CoreMenuType.MENU_TYPE_PERMISSION)
 	@RequestMapping("/coreMenuList")
 	public ModelAndView coreMenuList() throws Exception {
 		ModelAndView model = new ModelAndView("/manager/core_menu/core_menu_list");
@@ -45,7 +45,7 @@ public class CoreMenuController {
 	}
 	
 	@RequiresPermissions({"core:coreMenu:addAndEdit"})
-	@PermissionName(value="新增和修改",type=CoreMenuType.MENU_TYPE_BUTTON)
+	@PermissionName(value="新增和修改",type=CoreMenuType.MENU_TYPE_PERMISSION)
 	@RequestMapping("/coreMenuForm")
 	public ModelAndView coreMenuForm(Long coreMenuId,String actionType) throws Exception {
 		CoreMenu coreMenu = null;
@@ -107,7 +107,7 @@ public class CoreMenuController {
 	}  
 	
 	@RequiresPermissions({"core:coreMenu:del"})
-	@PermissionName(value="删除",type=CoreMenuType.MENU_TYPE_BUTTON)
+	@PermissionName(value="删除",type=CoreMenuType.MENU_TYPE_PERMISSION)
 	@RequestMapping("/deleteCoreMenu")
 	@ResponseBody
 	public Map<String,Object> deleteCoreMenu(Long coreMenuId)throws Exception {

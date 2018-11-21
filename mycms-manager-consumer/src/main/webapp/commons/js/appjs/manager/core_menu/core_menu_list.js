@@ -52,7 +52,7 @@ var load = function () {
                         return '<span class="label label-success">菜单</span>';
                     }
                     if (item.menuType === '2') {
-                        return '<span class="label label-warning">按钮</span>';
+                        return '<span class="label label-warning">权限</span>';
                     }
                 }
             },{

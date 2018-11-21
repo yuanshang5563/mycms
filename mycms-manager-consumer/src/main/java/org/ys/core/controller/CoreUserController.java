@@ -1,5 +1,7 @@
 package org.ys.core.controller;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -46,7 +48,7 @@ public class CoreUserController {
 	private CoreDeptService coreDeptService;
 	
 	@RequiresPermissions({"core:coreUser:list"})
-	@PermissionName(value="列表",type=CoreMenuType.MENU_TYPE_BUTTON)
+	@PermissionName(value="列表",type=CoreMenuType.MENU_TYPE_PERMISSION)
 	@RequestMapping("/coreUserList")
 	public ModelAndView coreUserList() throws Exception {
 		ModelAndView model = new ModelAndView("/manager/core_user/core_user_list");
@@ -54,7 +56,7 @@ public class CoreUserController {
 	}
 	
 	@RequiresPermissions({"core:coreUser:addAndEdit"})
-	@PermissionName(value="新增和修改",type=CoreMenuType.MENU_TYPE_BUTTON)
+	@PermissionName(value="新增和修改",type=CoreMenuType.MENU_TYPE_PERMISSION)
 	@RequestMapping("/coreUserForm")
 	public ModelAndView coreUserForm(Long coreUserId,String actionType) throws Exception {
 		CoreUser coreUser = null;
@@ -71,10 +73,18 @@ public class CoreUserController {
 			}
 		}
 		List<CoreRole> coreRoles = coreRoleService.queryCoreRolesByExample(new CoreRoleExample());
+		List<CoreRole> existCoreRoles = null;
+		if(null != coreUserId && coreUserId != 0l) {
+			existCoreRoles = coreRoleService.listCoreRolesByUserId(coreUserId);
+			if(null == existCoreRoles || existCoreRoles.size() <= 0) {
+				existCoreRoles = new ArrayList<CoreRole>();
+			}
+		}
 		ModelAndView model = new ModelAndView("/manager/core_user/core_user_form");
 		model.addObject("coreUser", coreUser);
 		model.addObject("actionType", actionType);
 		model.addObject("coreRoles", coreRoles);
+		model.addObject("existCoreRoles", existCoreRoles);
 		model.addObject("deptName", deptName);
 		return model;
 	}
@@ -122,7 +132,7 @@ public class CoreUserController {
 	}  
 	
 	@RequiresPermissions({"core:coreUser:del"})
-	@PermissionName(value="删除",type=CoreMenuType.MENU_TYPE_BUTTON)
+	@PermissionName(value="删除",type=CoreMenuType.MENU_TYPE_PERMISSION)
 	@RequestMapping("/deleteCoreUser")
 	@ResponseBody
 	public Map<String,Object> deleteCoreUser(Long coreUserId)throws Exception {
@@ -211,4 +221,46 @@ public class CoreUserController {
 		maps.put("rows", coreUsers);
 		return maps;
 	}	
+	
+	@RequiresPermissions({"core:coreUser:resetPwd"})
+	@PermissionName(value="重置密码",type=CoreMenuType.MENU_TYPE_PERMISSION)
+	@RequestMapping("/resetPwd")
+	public ModelAndView resetPwd(String coreUserId) throws Exception {
+		ModelAndView model = new ModelAndView("/manager/core_user/core_user_reset_pwd");
+		model.addObject("coreUserId", coreUserId);
+		return model;
+	}
+	
+	@RequiresPermissions({"core:coreUser:resetPwd"})
+	@RequestMapping("/saveResetPwd")
+	@ResponseBody
+	public Map<String,Object> saveResetPwd(HttpServletRequest request)throws Exception {
+		String msg = "";
+		boolean success = false;
+		try {
+			String coreUserId = request.getParameter("coreUserId");
+			String password = request.getParameter("password");
+			CoreUser coreUser = null;
+			if(StringUtils.isNotEmpty(coreUserId)) {
+				coreUser = coreUserService.queryCoreUserById(Long.parseLong(coreUserId));
+			}
+			if(null != coreUser) {
+				coreUser.setPassword(password);
+				coreUser.setModifiedTime(new Date());
+				coreUserService.updateById(coreUser);
+				msg = "重置成功！";
+				success = true;
+			}else {
+				msg = "重置失败，未找到用户！ ";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			msg = "程序发生异常,重置失败！ ";
+			success = false;
+		}
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("msg", msg);
+		map.put("success", success);
+		return map;
+	} 
 }
