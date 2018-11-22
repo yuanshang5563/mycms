@@ -16,4 +16,7 @@
     <dubbo:reference id="coreDeptService" interface="org.ys.core.service.CoreDeptService" />
     <dubbo:reference id="redisCacheStorageService" interface="org.ys.redis.service.RedisCacheStorageService" />
     <dubbo:reference id="redisManager" interface="org.crazycake.shiro.IRedisManager" />
+    <dubbo:reference id="coreParameterService" interface="org.ys.core.service.CoreParameterService" />
+    <dubbo:reference id="coreDictionariesService" interface="org.ys.core.service.CoreDictionariesService" />
+    <dubbo:reference id="coreDictionariesGroupService" interface="org.ys.core.service.CoreDictionariesGroupService" />
 </beans>  

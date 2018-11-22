@@ -2,29 +2,29 @@ var basePathUrl = "";
 var prefix = "";
 $(function() {
 	basePathUrl = $("#basePathUrl").val();
-	prefix = basePathUrl+"/manager/core/CoreDeptController";
+	prefix = basePathUrl+"/manager/core/CoreDictionariesGroupController";
 	
 	var actionType = $("#actionType").val();
 	if(actionType == "view"){
-		$('#coreDeptForm').find('input,textarea').attr('disabled',true);
+		$('#groupForm').find('input,textarea').attr('disabled',true);
 	}else{
-		$("#coreDeptBtn").on('click',function(){$("#coreDeptForm").submit();});
+		$("#groupBtn").on('click',function(){$("#groupForm").submit();});
 		validateRule();	
 	}
 });
 
 $.validator.setDefaults({
     submitHandler: function () {
-    	coreDeptFormSave();
+    	saveCoreDictionariesGroupForm();
     }
 });
 
-function coreDeptFormSave() {
+function saveCoreDictionariesGroupForm() {
 	$.ajax({
 		cache : true,
 		type : "POST",
-		url : prefix + "/saveCoreDeptForm",
-		data : $('#coreDeptForm').serialize(),
+		url : prefix + "/saveCoreDictionariesGroupForm",
+		data : $('#groupForm').serialize(),
 		async : false,
 		error : function(request) {
 			laryer.alert("连接错误");
@@ -45,21 +45,21 @@ function coreDeptFormSave() {
 
 function validateRule() {
     var icon = "<i class='fa fa-times-circle'></i> ";
-    $("#coreDeptForm").validate({
+    $("#groupForm").validate({
         rules: {
-        	deptName: {
+        	dictGroupName: {
                 required: true
             },
-            deptCode: {
+            dictGroupCode: {
                 required: true
             }
         },
         messages: {
-        	deptName: {
-                required: icon + "请输入部门名称",
+        	dictGroupName: {
+                required: icon + "请输入字典组名称",
             },
-            deptCode: {
-                required: icon + "请输入部门代码",
+            dictGroupCode: {
+                required: icon + "请输入字典组代码",
             }
         }
     })
