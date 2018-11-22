@@ -42,16 +42,21 @@
 
 
         <!-- 要生成哪些表 -->
-        <table tableName="core_user" domainObjectName="CoreUser"
+        <table tableName="core_dictionaries" domainObjectName="CoreDictionaries"
             enableCountByExample="true" enableUpdateByExample="true"
             enableDeleteByExample="true" enableSelectByExample="true"
             selectByExampleQueryId="true">
         </table>
-        <table tableName="core_dept" domainObjectName="CoreDept"
+        <table tableName="core_dictionaries_group" domainObjectName="CoreDictionariesGroup"
             enableCountByExample="true" enableUpdateByExample="true"
             enableDeleteByExample="true" enableSelectByExample="true"
             selectByExampleQueryId="true">
-        </table>        
+        </table>  
+        <table tableName="core_parameter" domainObjectName="CoreParameter"
+            enableCountByExample="true" enableUpdateByExample="true"
+            enableDeleteByExample="true" enableSelectByExample="true"
+            selectByExampleQueryId="true">
+        </table>                 
         <!--  
         <table tableName="core_menu" domainObjectName="CoreMenu"
             enableCountByExample="true" enableUpdateByExample="true"

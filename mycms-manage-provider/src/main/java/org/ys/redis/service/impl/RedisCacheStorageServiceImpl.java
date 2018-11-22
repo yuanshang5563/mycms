@@ -140,13 +140,4 @@ public class RedisCacheStorageServiceImpl implements RedisCacheStorageService {
         }  
         return result;  
     }
-    
-    @Override
-    public Set<byte[]> keys(String pattern) {
-    	if(StringUtils.isEmpty(pattern)) {
-    		return null;
-    	}
-    	
-    	return redisManager.keys(pattern.getBytes());
-    }
 }

@@ -61,11 +61,4 @@ public interface RedisCacheStorageService {
      * @return 
      */  
     public boolean set(final String key, Object value, int expireTime) ;
-    
-    /**
-     * 根据pattern查找集合
-     * @param pattern
-     * @return
-     */
-    public Set<byte[]> keys(String pattern);
 }
