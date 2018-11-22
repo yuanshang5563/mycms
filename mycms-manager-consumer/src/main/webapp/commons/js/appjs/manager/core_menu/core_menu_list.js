@@ -84,7 +84,12 @@ var load = function () {
                         + '" href="#" title="删除"  mce_href="#" onclick="remove(\''
                         + item.coreMenuId
                         + '\')"><i class="fa fa-remove"></i></a> ';
-                    return e + d + p;
+                    var s = '<a class="btn btn-primary btn-sm '
+                        + s_view_h
+                        + '" href="#" mce_href="#" title="查看" onclick="view(\''
+                        + item.coreMenuId
+                        + '\')"><i class="fa fa-search"></i></a> ';                   
+                    return e + d + p + s;
                 }
             }]
     });
@@ -113,6 +118,17 @@ function edit(coreMenuId) {
         shadeClose: false, // 点击遮罩关闭层
         area: ['800px', '520px'],
         content: prefix + '/coreMenuForm?coreMenuId=' + coreMenuId+"&actionType=edit" // iframe的url
+    });
+}
+
+function view(coreMenuId) {
+    layer.open({
+        type: 2,
+        title: '菜单查看',
+        maxmin: true,
+        shadeClose: false, // 点击遮罩关闭层
+        area: ['800px', '520px'],
+        content: prefix + '/coreMenuForm?coreMenuId=' + coreMenuId+"&actionType=view" // iframe的url
     });
 }
 

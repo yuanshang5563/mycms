@@ -74,10 +74,12 @@
 							<input type="hidden" value="${coreMenu.coreMenuId}" id="coreMenuId" name="coreMenuId" >
 							<input type="hidden" value="${coreMenu.parentCoreMenuId}" id="parentCoreMenuId" name="parentCoreMenuId">
 							<input type="hidden" value="${root}" id="basePathUrl">
-							<input type="hidden" value="${viewFlag}" id="viewFlag">		
+							<input type="hidden" value="${actionType}" id="actionType">		
 							<div class="form-group">
 								<div class="col-sm-8 col-sm-offset-3">
-									<button id="coreMenuBtn" type="button" class="btn btn-primary">提交</button>
+									<c:if test="${actionType !='view'}">
+										<button id="coreMenuBtn" type="button" class="btn btn-primary">提交</button>
+									</c:if>
 								</div>
 							</div>
 						</form>

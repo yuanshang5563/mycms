@@ -50,7 +50,7 @@ public class CoreMenuController {
 	public ModelAndView coreMenuForm(Long coreMenuId,String actionType) throws Exception {
 		CoreMenu coreMenu = null;
 		String parentMenuName = "根目录";
-		if(StringUtils.equals("edit", actionType.trim())) {
+		if(StringUtils.equals("edit", actionType.trim()) || StringUtils.equals("view", actionType.trim())) {
 			coreMenu = coreMenuService.queryCoreMenuById(coreMenuId);
 		}else if(StringUtils.equals("addSub", actionType.trim())){
 			coreMenu = new CoreMenu();

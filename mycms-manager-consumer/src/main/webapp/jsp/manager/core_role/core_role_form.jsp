@@ -40,13 +40,29 @@
 									<div id="coreMenuTree"></div>
 								</div>
 							</div>
+							<c:if test="${actionType =='view'}">
+							<div class="form-group">
+								<label class="col-sm-3 control-label">创建时间：</label>
+								<div class="col-sm-8">
+									<input class="form-control" type="text" value='<fmt:formatDate value="${coreRole.createdTime}" pattern="yyyy-MM-dd HH:mm:ss"/> '>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">修改时间：</label>
+								<div class="col-sm-8">
+									<input class="form-control" type="text" value='<fmt:formatDate value="${coreRole.modifiedTime}" pattern="yyyy-MM-dd HH:mm:ss"/> '>
+								</div>
+							</div>							
+							</c:if>							
 							<div class="form-group">
 								<div class="col-sm-8 col-sm-offset-3">
 									<input id="coreMenuIds" name="coreMenuIds" type="hidden">
 								  	<input type="hidden" value="${root}" id="basePathUrl">
 								  	<input type="hidden" value="${coreRole.coreRoleId}" name="coreRoleId" id="coreRoleId">
-								  	<input type="hidden" value="${actionType}" id="actionType">							
-									<button type="button" id="coreRoleBtn" class="btn btn-primary">提交</button>
+								  	<input type="hidden" value="${actionType}" id="actionType">		
+								  	<c:if test="${actionType !='view'}">					
+										<button type="button" id="coreRoleBtn" class="btn btn-primary">提交</button>
+									</c:if>
 								</div>
 							</div>
 						</form>

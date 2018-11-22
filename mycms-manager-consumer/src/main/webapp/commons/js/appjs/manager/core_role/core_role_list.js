@@ -67,7 +67,10 @@ function load() {
 					var d = '<a class="btn btn-warning btn-sm '+s_remove_h+'" href="#" title="删除"  mce_href="#" onclick="remove(\''
 							+ row.coreRoleId
 							+ '\')"><i class="fa fa-remove"></i></a> ';
-					return e + d;
+					var f = '<a class="btn btn-primary btn-sm '+s_view_h+'" href="#" mce_href="#" title="查看" onclick="view(\''
+							+ row.coreRoleId
+							+ '\')"><i class="fa fa-search"></i></a> ';					
+					return e + d + f;
 				}
 			} ]
 	});
@@ -96,6 +99,17 @@ function edit(coreRoleId) {
 		shadeClose : true, // 点击遮罩关闭层
 		area : [ '800px', '520px' ],
 		content : prefix + '/coreRoleForm?coreRoleId=' + coreRoleId+"&actionType=edit" // iframe的url
+	});
+}
+
+function view(coreRoleId) {
+	layer.open({
+		type : 2,
+		title : '角色查看',
+		maxmin : true,
+		shadeClose : true, // 点击遮罩关闭层
+		area : [ '800px', '520px' ],
+		content : prefix + '/coreRoleForm?coreRoleId=' + coreRoleId+"&actionType=view" // iframe的url
 	});
 }
 

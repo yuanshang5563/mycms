@@ -48,7 +48,7 @@ public class CoreDeptController {
 	public ModelAndView coreDeptForm(Long coreDeptId,String actionType) throws Exception {
 		CoreDept coreDept = null;
 		String parentDeptName = "根节点";
-		if(StringUtils.equals("edit", actionType.trim())) {
+		if(StringUtils.equals("edit", actionType.trim()) || StringUtils.equals("view", actionType.trim())) {
 			coreDept = coreDeptService.queryCoreDeptById(coreDeptId);
 		}else if(StringUtils.equals("addSub", actionType.trim())){
 			coreDept = new CoreDept();

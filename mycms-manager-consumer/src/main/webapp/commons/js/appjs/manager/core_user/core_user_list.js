@@ -121,7 +121,10 @@ function load(coreDeptId) {
 					var f = '<a class="btn btn-success btn-sm ' + s_resetPwd_h + '" href="#" title="重置密码"  mce_href="#" onclick="resetPwd(\''
 						+ row.coreUserId
 						+ '\')"><i class="fa fa-key"></i></a> ';
-					return e + d + f;
+					var g = '<a class="btn btn-primary btn-sm ' + s_view_h + '" href="#" title="查看"  mce_href="#" onclick="view(\''
+						+ row.coreUserId
+						+ '\')"><i class="fa fa-search"></i></a> ';					
+					return e + d + f + g;
 				}
 			} ]
 	});
@@ -150,6 +153,17 @@ function edit(coreUserId) {
 		shadeClose : false,
 		area : [ '800px', '520px' ],
 		content : prefix + '/coreUserForm?coreUserId=' + coreUserId+"&actionType=edit" // iframe的url
+	});
+}
+
+function view(coreUserId) {
+	layer.open({
+		type : 2,
+		title : '用户查看',
+		maxmin : true,
+		shadeClose : false,
+		area : [ '800px', '520px' ],
+		content : prefix + '/coreUserForm?coreUserId=' + coreUserId+"&actionType=view" // iframe的url
 	});
 }
 

@@ -39,6 +39,7 @@
  				var s_add_h = 'hidden';
 				var s_edit_h = 'hidden';
 				var s_remove_h = 'hidden';
+				var s_view_h = 'hidden';
 			</script>
 		</div>
 		<div>
@@ -50,9 +51,12 @@
 		</shiro:hasPermission>
 		<shiro:hasPermission name="core:coreMenu:del">
 			<script type="text/javascript">
-				var s_remove_h = '';
+				s_remove_h = '';
 			</script>
 		</shiro:hasPermission>
+			<script type="text/javascript">
+				s_view_h = '';
+			</script>		
 		</div>	
 	</div>
 </body>

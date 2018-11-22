@@ -1,7 +1,5 @@
 package org.ys.core.controller;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -60,10 +58,10 @@ public class CoreUserController {
 	@RequestMapping("/coreUserForm")
 	public ModelAndView coreUserForm(Long coreUserId,String actionType) throws Exception {
 		CoreUser coreUser = null;
-		if(StringUtils.equals("edit", actionType.trim())) {
-			coreUser = coreUserService.queryCoreUserById(coreUserId);
-		}else {
+		if(StringUtils.equals("add", actionType.trim())) {
 			coreUser = new CoreUser();
+		}else {
+			coreUser = coreUserService.queryCoreUserById(coreUserId);
 		}
 		String deptName = null;
 		if(null != coreUser.getCoreDeptId() && coreUser.getCoreDeptId() != 0) {

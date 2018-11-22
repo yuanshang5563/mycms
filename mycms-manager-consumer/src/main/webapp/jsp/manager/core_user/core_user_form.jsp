@@ -107,7 +107,7 @@
 							</div>
 							<input type="hidden" name="coreRoleIds" id="coreRoleIds">
 							<div class="form-group">
-								<label class="col-sm-3 control-label">角色</label>
+								<label class="col-sm-3 control-label">角色：</label>
 								<div class="col-sm-8">
 									<c:forEach items="${coreRoles}" var="role">
 									<label class="checkbox-inline">
@@ -118,16 +118,37 @@
 										<c:forEach items="${existCoreRoles}" var="existCoreRole">
 											<script>$("#coreRole_"+"${existCoreRole.coreRoleId}").prop("checked",true); </script>
 										</c:forEach>
-										
 									</c:if>
 								</div>
 							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">说明：</label>
+								<div class="col-sm-8">
+									<textarea rows="5" cols="63" id="comment" name="comment" class="form-control">${coreUser.comment}</textarea>
+								</div>
+							</div>							
+							<c:if test="${actionType =='view'}">
+							<div class="form-group">
+								<label class="col-sm-3 control-label">创建时间：</label>
+								<div class="col-sm-8">
+									<input class="form-control" type="text" value='<fmt:formatDate value="${coreUser.createdTime}" pattern="yyyy-MM-dd HH:mm:ss"/> '>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">修改时间：</label>
+								<div class="col-sm-8">
+									<input class="form-control" type="text" value='<fmt:formatDate value="${coreUser.modifiedTime}" pattern="yyyy-MM-dd HH:mm:ss"/> '>
+								</div>
+							</div>							
+							</c:if>
 						  	<input type="hidden" value="${root}" id="basePathUrl">
 						  	<input type="hidden" value="${coreUser.coreUserId}" name="coreUserId" id="coreUserId">
-						  	<input type="hidden" value="${viewFlag}" id="viewFlag">
+						  	<input type="hidden" value="${actionType}" id="actionType">
 							<div class="form-group">
 								<div class="col-sm-8 col-sm-offset-3">
-									<button type="button" id="coreUserBtn" class="btn btn-primary">提交</button>
+									<c:if test="${actionType !='view'}">
+										<button type="button" id="coreUserBtn" class="btn btn-primary">提交</button>
+									</c:if>
 								</div>
 							</div>
 						</form>

@@ -16,8 +16,14 @@ $(function() {
 		clearBtn:true,
 		forceParse: 0
 	});
-	$("#coreUserBtn").on('click',function(){$("#coreUserForm").submit();});
-	validateRule();
+	
+	var actionType = $("#actionType").val();
+	if(actionType == "view"){
+		$('#coreUserForm').find('input,textarea').attr('disabled',true);
+	}else{
+		$("#coreUserBtn").on('click',function(){$("#coreUserForm").submit();});
+		validateRule();
+	}
 });
 
 $.validator.setDefaults({

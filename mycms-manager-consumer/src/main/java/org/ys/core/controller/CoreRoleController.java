@@ -47,10 +47,10 @@ public class CoreRoleController {
 	@RequestMapping("/coreRoleForm")
 	public ModelAndView coreRoleForm(Long coreRoleId,String actionType) throws Exception {
 		CoreRole coreRole = null;
-		if(StringUtils.equals("edit", actionType.trim())) {
-			coreRole = coreRoleService.queryCoreRoleById(coreRoleId);
-		}else {
+		if(StringUtils.equals("add", actionType.trim())) {
 			coreRole = new CoreRole();
+		}else {
+			coreRole = coreRoleService.queryCoreRoleById(coreRoleId);
 		}
 		ModelAndView model = new ModelAndView("/manager/core_role/core_role_form");
 		model.addObject("actionType", actionType);

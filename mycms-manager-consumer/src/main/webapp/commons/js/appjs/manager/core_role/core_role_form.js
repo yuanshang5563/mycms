@@ -6,8 +6,13 @@ $(function() {
 	prefix = basePathUrl + "/manager/core/CoreRoleController";
 	getMenuTreeData();
 	
-	$("#coreRoleBtn").on('click',function(){$("#coreRoleForm").submit();});
-	validateRule();	
+	var actionType = $("#actionType").val();
+	if(actionType == "view"){
+		$('#coreRoleForm').find('input,textarea').attr('disabled',true);
+	}else{
+		$("#coreRoleBtn").on('click',function(){$("#coreRoleForm").submit();});
+		validateRule();	
+	}
 });
 
 $.validator.setDefaults({
@@ -29,7 +34,7 @@ function getAllSelectNodes() {
 function getMenuTreeData() {
 	var actionType = $("#actionType").val();
 	var queryUrl = basePathUrl+"/manager/core/CoreMenuController/coreMenuTreeJson";
-	if(actionType == 'edit'){
+	if(actionType == 'edit' || actionType == 'view'){
 		var coreRoleId = $("#coreRoleId").val();
 		queryUrl = basePathUrl+"/manager/core/CoreMenuController/coreMenuTreeJsonByRoleId?coreRoleId="+coreRoleId;
 	}

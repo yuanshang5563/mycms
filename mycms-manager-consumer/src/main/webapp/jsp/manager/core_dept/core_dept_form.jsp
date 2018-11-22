@@ -53,10 +53,12 @@
 							<input type="hidden" value="${coreDept.parentCoreDeptId}" id="parentCoreDeptId" name="parentCoreDeptId">
 							<input type="hidden" value="${coreDept.delFlag}" id="delFlag" name="delFlag" >
 							<input type="hidden" value="${root}" id="basePathUrl">
-							<input type="hidden" value="${viewFlag}" id="viewFlag">		
+							<input type="hidden" value="${actionType}" id="actionType">		
 							<div class="form-group">
 								<div class="col-sm-8 col-sm-offset-3">
-									<button type="button" class="btn btn-primary" id="coreDeptBtn">提交</button>
+									<c:if test="${actionType !='view'}">
+										<button type="button" class="btn btn-primary" id="coreDeptBtn">提交</button>
+									</c:if>
 								</div>
 							</div>
 						</form>

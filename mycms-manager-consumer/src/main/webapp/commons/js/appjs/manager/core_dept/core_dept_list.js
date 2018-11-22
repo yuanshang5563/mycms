@@ -58,7 +58,12 @@ var load = function (deptName) {
                         + '" href="#" title="删除"  mce_href="#" onclick="remove(\''
                         + item.coreDeptId
                         + '\')"><i class="fa fa-remove"></i></a> ';
-                    return e + d + p;
+                    var s = '<a class="btn btn-primary btn-sm '
+                        + s_view_h
+                        + '" href="#" mce_href="#" title="查看" onclick="view(\''
+                        + item.coreDeptId
+                        + '\')"><i class="fa fa-search"></i></a> ';                    
+                    return e + d + p + s;
                 }
             }]
     });
@@ -92,6 +97,17 @@ function edit(coreDeptId) {
         shadeClose: false, // 点击遮罩关闭层
         area: ['800px', '520px'],
         content: prefix + '/coreDeptForm?coreDeptId=' + coreDeptId+"&actionType=edit" // iframe的url
+    });
+}
+
+function view(coreDeptId) {
+    layer.open({
+        type: 2,
+        title: '部门查看',
+        maxmin: true,
+        shadeClose: false, // 点击遮罩关闭层
+        area: ['800px', '520px'],
+        content: prefix + '/coreDeptForm?coreDeptId=' + coreDeptId+"&actionType=view" // iframe的url
     });
 }
 

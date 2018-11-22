@@ -3,8 +3,14 @@ var prefix = "";
 $(function() {
 	basePathUrl = $("#basePathUrl").val();
 	prefix = basePathUrl+"/manager/core/CoreDeptController";
-	$("#coreDeptBtn").on('click',function(){$("#coreDeptForm").submit();});
-	validateRule();	
+	
+	var actionType = $("#actionType").val();
+	if(actionType == "view"){
+		$('#coreDeptForm').find('input,textarea').attr('disabled',true);
+	}else{
+		$("#coreDeptBtn").on('click',function(){$("#coreDeptForm").submit();});
+		validateRule();	
+	}
 });
 
 $.validator.setDefaults({

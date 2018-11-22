@@ -79,7 +79,15 @@ String extBasePath = request.getScheme()+"://"+request.getServerName()+":"+reque
         created: function () {
             this.notify()
         }
-    })
+    });
+    
+    function logout(){
+    	layer.confirm('确定要退出吗？', {
+    		btn : [ '确定', '取消' ]
+    	}, function() {
+    		location.href = "${root}/LoginController/logout";
+    	});
+    }
 </script>    
 </head>
 <body class="fixed-sidebar full-height-layout gray-bg" style="overflow: hidden">
@@ -188,7 +196,7 @@ String extBasePath = request.getScheme()+"://"+request.getServerName()+":"+reque
                     <li class="J_tabCloseOther"><a>关闭其他选项卡</a></li>
                 </ul>
             </div>
-            <a href="${root}/LoginController/logout" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
+            <a href="#" class="roll-nav roll-right J_tabExit" onclick="logout()"><i class="fa fa fa-sign-out"></i> 退出</a>
         </div>
         <div class="row J_mainContent" id="content-main">
             <iframe class="J_iframe" name="iframe0" width="100%" height="100%" 
