@@ -43,4 +43,23 @@
         <property name="jedisPool" ref="jedisPool"></property>
         <property name="expire" value="${redis.default.expire}"/>
     </bean>
+
+
+    <!-- redis服务器中心 -->  
+    <bean id="jedisConnectionFactory"  class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" >  
+          <property name="poolConfig" ref="redisPoolConfig" />  
+          <property name="port" value="${redis.port}" />  
+          <property name="hostName" value="${redis.host}" />
+          <property name="timeout" value="${redis.timeout}" ></property>  
+    </bean>
+
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="jedisConnectionFactory" />
+        <property name="keySerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+        </property>
+        <property name="valueSerializer">
+            <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+        </property>
+    </bean>
 </beans>

@@ -9,10 +9,7 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
-import org.crazycake.shiro.IRedisManager;
-import org.crazycake.shiro.RedisCacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,18 +20,14 @@ import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.ys.common.constant.CoreMenuType;
-import org.ys.common.constant.ShiroConstant;
 import org.ys.common.domain.Tree;
 import org.ys.common.shiro.PermissionName;
-import org.ys.common.utils.ObjectUtil;
 import org.ys.core.model.CoreMenu;
 import org.ys.core.model.CoreMenuExample;
-import org.ys.core.model.CoreMenuExample.Criteria;
 import org.ys.core.model.CoreUser;
 import org.ys.core.model.CoreUserExample;
 import org.ys.core.service.CoreMenuService;
 import org.ys.core.service.CoreUserService;
-import org.ys.redis.service.RedisCacheStorageService;
 
 @Controller
 @RequestMapping("/manager/core/CoreManagerController")
@@ -47,12 +40,6 @@ public class CoreManagerController {
 	
 	@Autowired
 	private RequestMappingHandlerMapping requestMappingHandlerMapping;
-	
-	@Autowired
-	private RedisCacheStorageService redisCacheStorageService;
-	
-	@Autowired
-	private RedisCacheManager redisCacheManager;
 	
 	@RequestMapping("/main")
 	public String main(Model model) throws Exception {

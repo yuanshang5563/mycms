@@ -23,8 +23,6 @@ import org.ys.common.page.PageBean;
 import org.ys.common.shiro.PermissionName;
 import org.ys.common.utils.DateTimeConverter;
 import org.ys.common.utils.RequsetUtils;
-import org.ys.core.model.CoreDept;
-import org.ys.core.model.CoreDeptExample;
 import org.ys.core.model.CoreMenu;
 import org.ys.core.model.CoreMenuExample;
 import org.ys.core.model.CoreMenuExample.Criteria;
