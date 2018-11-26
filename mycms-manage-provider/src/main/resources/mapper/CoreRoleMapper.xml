@@ -271,8 +271,8 @@
   </update>
   
   <select id="listCoreRolesByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
- 	select DISTINCT r.* from core_role r inner join core_user_role ur on r.core_role_id=ur.core_role_id
-	inner join core_user u on ur.core_user_id
+ 	select DISTINCT r.* from core_user_role ur inner join core_role r on ur.core_role_id=r.core_role_id
+	inner join core_user u on ur.core_user_id=u.core_user_id
 	where ur.core_user_id=#{coreUserId} 
   </select>
 </mapper>

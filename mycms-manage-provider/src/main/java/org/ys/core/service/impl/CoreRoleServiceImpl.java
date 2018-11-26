@@ -86,8 +86,8 @@ public class CoreRoleServiceImpl implements CoreRoleService {
 				coreRoleMapper.updateByPrimaryKey(coreRole);
 			}
 			//更新角色菜单映射
+			coreRoleMenuMapper.delCoreRoleMenuByRoleId(coreRole.getCoreRoleId());
 			if(null != coreMenuIdArr && coreMenuIdArr.length > 0) {
-				coreRoleMenuMapper.delCoreRoleMenuByRoleId(coreRole.getCoreRoleId());
 				for (String coreMenuId : coreMenuIdArr) {
 					if(StringUtils.isNotEmpty(coreMenuId)) {
 						CoreRoleMenu coreRoleMenu = new CoreRoleMenu();
